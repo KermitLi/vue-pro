@@ -3,7 +3,7 @@
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
-      <li >{{prop.message}}</li>
+      <li v-for='item in prop.users'>name:{{item.name}},age:{{item.age}}</li>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
       <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
@@ -28,7 +28,7 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App',
       prop:{
-        message:'123'
+        users:[]
       }
     }
   },
@@ -37,8 +37,7 @@ export default {
   },
   created(){
     this.$http.get('/api').then(res=>{
-    this.$set(this.prop,'message',res.data.message);
-    console.log(res);
+    this.$set(this.prop,'users',res.data);
     });
   }
 }

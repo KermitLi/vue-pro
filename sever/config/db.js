@@ -1,8 +1,7 @@
 var config = require('./db.config.js');
 var mongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
 
-var connect =  function *(callback){
+var connect =  function *(){
     return yield mongoClient.connect(config.url+':'+config.port+'/'+config.db);
 }
 

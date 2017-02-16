@@ -1,30 +1,27 @@
-var Koa = require('koa');
-var app = new Koa();
+var app = require('koa')();
   var koa = require('koa-router')()
   , logger = require('koa-logger')
   , json = require('koa-json')
   , views = require('koa-views')
   , onerror = require('koa-onerror');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+var api = require('./routes/api');
 
 app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
 var connectDb = require('./config/db.js')
 app.use(function *(next){
-  var data = '123';
-  var db = yield connectDb();
-  this.body = yield db.collection('users').find({}).toArray();
+  var start = new Date;
+  yield next;
+  var ms = new Date - start;
+  console.log('%s %s - %s', this.method, this.url, ms);
 });
-// app
-//   .use(index.routes())
-//   .use(index.allowedMethods());
-// app.use(require('koa-static')(__dirname + '/public'));
+
+koa.use('/api',api.routes());
+
+app.use(koa.routes());
 
 
-// mount root routes
-// app.use(koa.routes());
 
 module.exports = app;
