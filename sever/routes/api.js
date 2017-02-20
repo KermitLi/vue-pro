@@ -1,10 +1,12 @@
 var router = require('koa-router')();
-var connectDb = require('../config/db.js');
 
-router.get('/', function *(ctx,next){
-
-  var db = yield connectDb();
-  this.body = yield db.collection('users').find({}).toArray();
+router.get('/', function *(next){
+    this.db.sync();
+    yield this.db.models.users.create({
+      name:'hello',
+      age:'32'
+    });
+    this.body = yield this.db.models.users.findAll({});
 });
 
 module.exports = router;

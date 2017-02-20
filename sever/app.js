@@ -1,20 +1,20 @@
-var app = require('koa')();
-  var koa = require('koa-router')()
+const app = require('koa')();
+  const koa = require('koa-router')()
   , logger = require('koa-logger')
-  , json = require('koa-json')
-  , views = require('koa-views')
-  , onerror = require('koa-onerror');
+  , json = require('koa-json');
 
-var api = require('./routes/api');
+const api = require('./routes/api');
+const db = require('./middleware/orm.js');
 
 app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
-var connectDb = require('./config/db.js')
+app.use(db.orm);
+
 app.use(function *(next){
-  var start = new Date;
+  let start = new Date;
   yield next;
-  var ms = new Date - start;
+  let ms = new Date - start;
   console.log('%s %s - %s', this.method, this.url, ms);
 });
 
