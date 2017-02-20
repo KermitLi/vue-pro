@@ -22,5 +22,5 @@ koa.use('/api',api.routes())
 
 app.use(koa.routes());
 
-app.listen(3000);
+app.listen(3000,function(){console.log('server start!')});
 module.exports = app;

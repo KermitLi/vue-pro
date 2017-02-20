@@ -22,6 +22,7 @@ module.exports.orm = function *(next) {
                 sequelize.import(path.join(__dirname, '../models/', file));
                 console.log(database.models);
             });
+      yield database.sync();
     }
     this.db = database;
     yield next;

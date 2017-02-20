@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" style="position:absolute"></canvas>
+  <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+     Stars(document.getElementById('canvas'));
+     function Stars(canvas,options){
+       var options = options||{};
+       var ctx = canvas.getContext('2d');
+       canvas.width = options.width||window.innerWidth;
+       canvas.height = options.height||window.innerHeight;
+       var width = canvas.width;
+       var height = canvas.height;
+
+       var config = {
+         width:width,
+         height:height,
+         stars:[],
+         star:{
+           radius:options.starRadius||3,
+           color:options.starColor||'#03A9F4'
+         },
+         line:{
+           color:options.lineColor||'#FFC107',
+           width:options.lineWidth||1
+         },
+         length:options.length||110,
+         direction:[1,-1],
+         distance:options.distance||100,
+         bgColor:'#616161'
+       }
+
+       function Star(){
+         this.x = parseInt(Math.random()*config.width);
+         this.y = parseInt(Math.random()*config.height);
+         this.vx = Math.random()*0.2;
+         this.vy = Math.random()*0.2;
+         this.direction = config.direction[Math.round(Math.random())];
+         this.radius = Math.random()*config.star.radius;
+       };
+
+       Star.prototype.create = function(){
+          ctx.beginPath();
+          ctx.fillStyle = config.star.color;
+          ctx.arc(this.x,this.y,this.radius,0,2*Math.PI,true);
+          ctx.fill();
+          ctx.closePath();
+       };
+
+       Star.animate = function(){
+         config.stars.forEach(function(star){
+           if(star.x<=0||star.x>=config.width){
+             star.vx=-star.vx;
+             star.vy=star.vy;
+           }
+           else if(star.y<=0||star.y>=config.height){
+             star.vx = star.vx;
+             star.vy = -star.vy;
+           }
+
+           star.x+=star.vx*star.direction;
+           star.y+=star.vy*star.direction;
+           star.create();
+         });
+       };
+
+       Star.line = function(){
+         config.stars.forEach(function(Xstar){
+           config.stars.forEach(function(Ystar){
+              if(Math.abs(Xstar.x-Ystar.x)<config.distance&&Math.abs(Xstar.y-Ystar.y)<config.distance){
+                ctx.strokeStyle = config.line.color;
+                ctx.lineWidth = config.line.width;
+                ctx.beginPath();
+                ctx.moveTo(Xstar.x,Xstar.y);
+                ctx.lineTo(Ystar.x,Ystar.y);
+                ctx.stroke();
+                ctx.closePath();
+              }
+           });
+         });
+       }
+
+         for(var i = 1;i<=config.length;i++){
+           ctx.beginPath();
+           let star = new Star();
+           star.create();
+           config.stars.push(star);
+         }
+
+       setInterval(function(){
+         ctx.clearRect(0,0,config.width,config.height);
+         ctx.beginPath();
+         ctx.fillStyle = config.bgColor;
+         ctx.fillRect(0,0,width,height);
+         ctx.closePath();
+         Star.line();
+         Star.animate();
+       },25);
+
+     }
+  </script>
+</html>
