@@ -18,10 +18,9 @@ app.use(function *(next){
   console.log('%s %s - %s', this.method, this.url, ms);
 });
 
-koa.use('/api',api.routes());
+koa.use('/api',api.routes())
 
 app.use(koa.routes());
 
-
-
+app.listen(3000);
 module.exports = app;
