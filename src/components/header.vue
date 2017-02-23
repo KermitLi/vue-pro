@@ -4,6 +4,7 @@
       <ut-col :span=1 :offset=1>
           <h3 class='title'>Kermit</h3>
       </ut-col>
+      ul
     </ut-row>
   </ut-header>
 </template>
@@ -16,7 +17,7 @@ export default {
 
 <style lang="css" scoped>
   .ut-header {
-    background-color: rgba(0,153,229,.7);
+    background-color:'#556a7f';
   }
 
   .title {
