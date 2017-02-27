@@ -6,7 +6,6 @@ import router from './router'
 import $http from 'vue-resource'
 import utear from 'vue-utear'
 import  "vue-utear/dist/vue-utear.css"
-const $ = require('jquery')();
 
 Vue.use($http);
 Vue.use(utear);

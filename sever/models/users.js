@@ -3,8 +3,8 @@ module.exports = function (db, Sequelize) {
         name: {
             type: Sequelize.STRING(30)
         },
-        age: {
-            type: Sequelize.STRING(4)
+        pwd: {
+            type: Sequelize.STRING(40)
         }
     }, {
         timestamps: false,

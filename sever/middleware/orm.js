@@ -20,7 +20,6 @@ module.exports.orm = function *(next) {
             })
             .forEach(function (file) {
                 sequelize.import(path.join(__dirname, '../models/', file));
-                console.log(database.models);
             });
       yield database.sync();
     }

@@ -1,12 +1,10 @@
 var router = require('koa-router')();
+var login = require('../controllers/login.js');
+var checkName = require('../controllers/checkName.js');
+var register = require('../controllers/register.js');
 
-router.get('/', function *(next){
-    this.body = yield this.db.models.users.findAll({});
-});
-
-router.get('/initDB',function *(next){
-    yield this.db.models.users.create({name:'lixuan',age:'21'});
-    this.body = 'init db successfully';
-});
+router.post('/login',login);
+router.post('/checkName',checkName);
+router.post('/register',register);
 
 module.exports = router;

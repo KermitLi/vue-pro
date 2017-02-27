@@ -27,6 +27,16 @@ export default {
   padding: 0;
 }
 
+.layout {
+    background-color: white!important;
+}
+
+a {
+    text-decoration: none;
+    color: #20a0ff;
+    font-size: 0.5rem;
+}
+
 @media screen and (max-width: 320px) {
   html {font-size: 12px;}
 }
@@ -56,4 +66,6 @@ export default {
 @media screen and (min-width: 768px) {
   html {font-size: 30px;}
 }
+
+
 </style>

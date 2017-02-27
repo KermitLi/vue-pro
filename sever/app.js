@@ -5,11 +5,13 @@ const app = require('koa')();
 
 const api = require('./routes/api');
 const db = require('./middleware/orm.js');
+const jwt = require('koa-jwt');
 
 app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
 app.use(db.orm);
+app.use(jwt({secret:'Kermit'}).unless({path:'/api/login'}));
 
 app.use(function *(next){
   let start = new Date;

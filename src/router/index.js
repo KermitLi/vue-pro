@@ -1,11 +1,14 @@
 import Vue from 'vue'
+import vueResouce from 'vue-resource';
 import Router from 'vue-router'
 import Hello from 'components/Hello'
 import login from '../views/login'
+import register from '../views/register'
 
-Vue.use(Router)
+Vue.use(Router);
+Vue.use(vueResouce);
 
-export default new Router({
+var router = new Router({
   routes: [
     {
       path: '/',
@@ -16,6 +19,33 @@ export default new Router({
       path:'/login',
       name:'login',
       component:login
-    }
+  },
+  {
+      path:'/register',
+      name:'register',
+      component:register
+  }
   ]
-})
+});
+
+router.beforeEach(function(to,from,next){
+    let token = sessionStorage.getItem('token');
+    console.log(token);
+    if(to.path=='/login'){
+        alert('b');
+        next();
+    }
+    else{
+
+        if(token!=null&&token!='null'){
+            alert('bbb');
+            Vue.http.headers.common['Authorization'] = 'Bearer ' + token;
+            next();
+        }
+        else {
+            next('/login');
+        }
+    }
+});
+
+export default router;
