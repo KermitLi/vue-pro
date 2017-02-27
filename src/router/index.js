@@ -32,13 +32,11 @@ router.beforeEach(function(to,from,next){
     let token = sessionStorage.getItem('token');
     console.log(token);
     if(to.path=='/login'){
-        alert('b');
         next();
     }
     else{
 
         if(token!=null&&token!='null'){
-            alert('bbb');
             Vue.http.headers.common['Authorization'] = 'Bearer ' + token;
             next();
         }

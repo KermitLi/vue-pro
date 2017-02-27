@@ -6,7 +6,7 @@
             </ut-row>
             <ut-row>
                     <ut-col :span="6" :offset="9">
-                        <ut-input v-model:value='userName' type='text' class="user-name" size='large' placeholder='Enter Your Name' @blur.native='check'></ut-input>
+                        <ut-input v-model:value='userName' type='text' class="user-name" size='large' placeholder='Enter Your Name' @blur='check'></ut-input>
                         <ut-input v-model:value='userEmail' type='text' class="user-email" size='large' placeholder='Enter Your Email'></ut-input>
                         <ut-input v-model:value='userPwd' class="user-pwd" placeholder='Enter Your Password' size='large' type='password'></ut-input>
                         <ut-input v-model:value='userConfirmPwd' class="user-confirm-pwd" placeholder='Confirm Your Password' size='large' type='password'></ut-input>
@@ -46,7 +46,7 @@ export default {
       },
       check(){
           this.$http.post('/api/checkName',{name:this.userName}).then((res)=>{
-              alert(res.data);
+              console.log(res.data);
           },(err)=>alert('请求错误'))
       }
   }

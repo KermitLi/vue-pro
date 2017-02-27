@@ -44,7 +44,6 @@ export default {
               this.$http.post('/api/login',userInfo).then(function(res){
                   if(res.data.state){
                       sessionStorage.setItem('token',res.data.token);
-                      console.log(res.data.token);
                       alert('登录成功');
                       this.$router.push({path:'/'});
                   }
