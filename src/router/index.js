@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import vueResouce from 'vue-resource';
 import Router from 'vue-router'
-import Hello from 'components/Hello'
+import home from '../views/home'
 import login from '../views/login'
 import register from '../views/register'
 
@@ -12,8 +12,8 @@ var router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      name: 'home',
+      component: home
     },
     {
       path:'/login',
