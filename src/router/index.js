@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import home from '../views/home'
 import login from '../views/login'
 import register from '../views/register'
+import post from '../views/post.vue';
 
 Vue.use(Router);
 Vue.use(vueResouce);
@@ -24,6 +25,11 @@ var router = new Router({
       path:'/register',
       name:'register',
       component:register
+  },
+  {
+      path:'/article/post',
+      name:'post',
+      component:post
   }
   ]
 });
