@@ -11,7 +11,7 @@ app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
 app.use(db.orm);
-app.use(jwt({secret:'Kermit'}).unless({path:'/api/login'}));
+app.use(jwt({secret:'Kermit'}).unless({path:['/api/login','/api/initDB','/api/getArticle','/api/deleteArticle']}));
 
 app.use(function *(next){
   let start = new Date;

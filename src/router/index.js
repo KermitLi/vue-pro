@@ -36,7 +36,6 @@ var router = new Router({
 
 router.beforeEach(function(to,from,next){
     let token = sessionStorage.getItem('token');
-    console.log(token);
     if(to.path=='/login'){
         next();
     }

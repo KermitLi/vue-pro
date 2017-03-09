@@ -15,7 +15,7 @@
                 </ut-row>
                 <ut-row>
                     <ut-col :span='24'>
-                        <ut-button type='primary' size='large'>发表</ut-button>
+                        <ut-button type='primary' size='large' @click.native='postArticle'>发表</ut-button>
                     </ut-col>
                 </ut-row>
             </ut-col>
@@ -31,14 +31,9 @@
     </div>
 </template>
 <script lang="">
-const hjs = require('highlight.js/lib/highlight_1.js');
+const jwt = require('koa-jwt');
 const marked = require('marked');
-
-marked.setOptions({
-    highlight: function (code) {
-   return hjs(code,{autoDetect:true});
- }
-});
+const monment = require('moment');
 
     export default {
         name:'post',
@@ -58,7 +53,26 @@ marked.setOptions({
             }
         },
         methods:{
-            marked,hjs
+            marked,validate(){
+                return true
+            },
+            postArticle(){
+                if(this.validate()){
+                    let title = this.title;
+                    let contents = this.contents;
+                    let time = monment().fromNow();
+                    let token = sessionStorage.getItem('token');
+                    if(token!==null&&token!=='null'){
+                        var userName = jwt.verify(token,'Kermit').name;
+                    }
+                    else {
+                        this.$router.push({path:'/login'});
+                    }
+
+                    let article = {title,contents,time,userName};
+                    this.$http.post('/api/postArticle',article).then((res)=>alert(res.data));
+                }
+            }
         }
     }
 </script>

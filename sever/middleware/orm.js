@@ -21,7 +21,6 @@ module.exports.orm = function *(next) {
             .forEach(function (file) {
                 sequelize.import(path.join(__dirname, '../models/', file));
             });
-      yield database.sync();
     }
     this.db = database;
     yield next;
