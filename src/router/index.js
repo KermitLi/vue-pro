@@ -5,6 +5,7 @@ import home from '../views/home'
 import login from '../views/login'
 import register from '../views/register'
 import post from '../views/post.vue';
+import uploadPhoto from '../components/uploadPhoto.vue';
 
 Vue.use(Router);
 Vue.use(vueResouce);
@@ -30,6 +31,12 @@ var router = new Router({
       path:'/article/post',
       name:'post',
       component:post
+  }
+  ,
+  {
+      path:'/photo/upload',
+      name:'uploadPhoto',
+      component:uploadPhoto
   }
   ]
 });

@@ -54,7 +54,7 @@ const monment = require('moment');
         },
         methods:{
             marked,validate(){
-                return true
+                return true;
             },
             postArticle(){
                 if(this.validate()){

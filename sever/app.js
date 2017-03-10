@@ -1,7 +1,8 @@
 const app = require('koa')();
   const koa = require('koa-router')()
   , logger = require('koa-logger')
-  , json = require('koa-json');
+  , json = require('koa-json'),path = require('path')
+  , staticPath = require('koa-static');
 
 const api = require('./routes/api');
 const db = require('./middleware/orm.js');
@@ -11,7 +12,8 @@ app.use(require('koa-bodyparser')());
 app.use(json());
 app.use(logger());
 app.use(db.orm);
-app.use(jwt({secret:'Kermit'}).unless({path:['/api/login','/api/initDB','/api/getArticle','/api/deleteArticle']}));
+app.use(staticPath(path.join(__dirname,'/public')));
+app.use(jwt({secret:'Kermit'}).unless({path:['/api/login','/api/initDB','/api/getArticle','/api/deleteArticle','/api/uploadPhoto']}));
 
 app.use(function *(next){
   let start = new Date;
