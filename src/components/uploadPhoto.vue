@@ -25,6 +25,7 @@
             success(res){
                 if(res.state){
                     this.urls.push(res.url);
+
                 }
             }
         }

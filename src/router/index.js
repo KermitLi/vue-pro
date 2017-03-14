@@ -4,8 +4,8 @@ import Router from 'vue-router'
 import home from '../views/home'
 import login from '../views/login'
 import register from '../views/register'
-import post from '../views/post.vue';
 import uploadPhoto from '../components/uploadPhoto.vue';
+import post from '../views/post';
 
 Vue.use(Router);
 Vue.use(vueResouce);
@@ -40,7 +40,6 @@ var router = new Router({
   }
   ]
 });
-
 router.beforeEach(function(to,from,next){
     let token = sessionStorage.getItem('token');
     if(to.path=='/login'){
