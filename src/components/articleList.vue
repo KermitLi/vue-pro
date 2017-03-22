@@ -18,21 +18,22 @@
                         </ut-dropdown>
                     </div>
                     <div>
-                    <router-link to='#' class="article-title">Javascript中的闭包机制</router-link>
-                    <article class="article-content">
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制dawfsefsgr
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                       Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                    </article> 
+                        <router-link to='#' class="article-title">Javascript中的闭包机制</router-link>
+                        <article class="article-content">
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制dawfsefsgr
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        </article>
                     </div>
+                    <router-link to='#' class='readMore'>查看更多</router-link>
                 </ut-card>
             </ut-col>
             <ut-col :span='4'></ut-col>
@@ -88,11 +89,8 @@
                             cursor:pointer;
                         }
                     }
-
+                    
                     .utear-card-body {
-                        background:red;
-                        width: 100%;
-
                         .article-title {
                             font-size:0.7rem;
                             color:#03A9F4;
@@ -107,13 +105,25 @@
 
                         .article-content {
                             font-size:0.6rem;
+                            line-height: 1.4;
+                            word-break: break-all;
                             color:#424242;
+                            height: 5rem;
+                            margin-top: 0.4rem;
                             overflow : hidden;
-                            text-overflow: ellipsis;
-                            display: -webkit-box;
-                            -webkit-line-clamp: 3;
-                            -webkit-box-orient: vertical;
-                        } 
+                        }
+                    }
+
+                    .readMore {
+                        font-size:0.5rem;
+                        color:#4FC3F7;
+                        position: absolute;
+                        right: 1rem;
+                        bottom: 0.4rem;
+                    }
+
+                    .readMore:hover{
+                        color:#29B6F6;
                     }
                 }
 
