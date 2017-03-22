@@ -9,17 +9,24 @@ export default {
   name: 'app'
 }
 </script>
+<style lang='less'>
+@import './assets//css/material-icons.css';
+@font-face {
+  font-family:'Source Sans Pro';
+  src:url('./assets/fonts/SourceSansPro-Regular.ttf');
+  font-weight:400;
+}
 
-<style>
+
 #app {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  text-align: left;
   color: #2c3e50;
   width: 100%;
   height: 100%;
-  font-family: 'Open Sans', sans-serif;
+  overflow:hidden;
 }
 
 * {
@@ -35,6 +42,11 @@ a {
     text-decoration: none;
     color: #20a0ff;
     font-size: 0.5rem;
+    display:block;
+}
+
+img {
+  display:block;
 }
 
 @media screen and (max-width: 320px) {
@@ -65,6 +77,22 @@ a {
 
 @media screen and (min-width: 768px) {
   html {font-size: 30px;}
+}
+
+.clearFix:after {
+  content: '.';
+  width: 0;
+  height: 0;
+  display: block;
+  clear: both;
+  visibility: hidden;
+  overflow: hidden;
+}
+
+.avatar {
+  width:1.8rem;
+  height:1.8rem;
+  border-radius:50%;
 }
 
 

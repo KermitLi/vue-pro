@@ -1,19 +1,18 @@
 module.exports = function (db, Sequelize) {
     var result = db.define("users", {
-        name: {
+        userName: {
             type: Sequelize.STRING(30)
         },
-        pwd: {
+        album: {
             type: Sequelize.STRING(40)
         },
-        avatar_url:{
+        url:{
             type: Sequelize.STRING(100),
-            defaultValue:'/photos/logo.jpg'
         }
         
     }, {
-        timestamps: false,
-        freezeTableName: false
+        timestamps: true,
+        freezeTableName: true
     });
     return result;
 };

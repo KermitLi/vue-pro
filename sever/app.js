@@ -13,7 +13,7 @@ app.use(json());
 app.use(logger());
 app.use(db.orm);
 app.use(staticPath(path.join(__dirname,'/public')));
-app.use(jwt({secret:'Kermit'}).unless({path:['/api/login','/api/initDB','/api/getArticle','/api/deleteArticle','/api/uploadPhoto']}));
+app.use(jwt({secret:'Kermit'}).unless({path:['/api/checkName','/api/register','/api/login','/api/initDB','/api/getArticle','/api/deleteArticle','/api/uploadPhoto']}));
 
 app.use(function *(next){
   let start = new Date;

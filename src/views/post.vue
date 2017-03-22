@@ -77,7 +77,7 @@ const monment = require('moment');
     }
 </script>
 <style lang="less" scoped>
-@import "../assets/page.css";
+@import "../assets/css/page.css";
 
   .title {
       appearance:none;

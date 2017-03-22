@@ -42,7 +42,7 @@ var router = new Router({
 });
 router.beforeEach(function(to,from,next){
     let token = sessionStorage.getItem('token');
-    if(to.path=='/login'){
+    if(to.path=='/login'||to.path=='/register'){
         next();
     }
     else{

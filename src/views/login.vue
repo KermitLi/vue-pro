@@ -9,7 +9,7 @@
                         <ut-input v-model:value='userName' type='text' class="user-name" size='large' placeholder='Enter Your Name'></ut-input>
                         <ut-input v-model:value='userPwd' class="user-pwd" placeholder='Enter Your Password' size='large' type='password'></ut-input>
                         <ut-button class="login" type="primary" size='large' @click.native='login'>登录</ut-button>
-                        <router-link to='/forgetPwd'>忘记密码？</router-link>
+                        <router-link to='/forgetPwd'>忘记密码?</router-link>
                     </ut-col>
             </ut-row>
             <ut-row>

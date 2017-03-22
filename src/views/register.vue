@@ -41,7 +41,15 @@ export default {
                   pwd:md5(this.userPwd),
                   logoUrl:this.logoUrl
               }
-              this.$http.post('/api/register',userInfo).then((res)=>alert(res.data),(err)=>alert('请求错误'));
+              this.$http.post('/api/register',userInfo).then((res)=>{
+                  if(res.data){
+                      alert("注册成功");
+                      this.$router.push({path:'/login'});
+                  }
+                  else{
+                      alert("注册失败");
+                  }
+              },(err)=>alert('请求错误'));
           }
       },
       check(){
