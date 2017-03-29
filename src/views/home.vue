@@ -1,8 +1,7 @@
 <template>
   <div class="home">
-     <navMenu> </navMenu>
-     <articleList></articleList>
-     <footer></footer>
+     <navMenu class="navMenu"> </navMenu>
+     <articleList class="articleList"></articleList>
   </div>
 </template>
 
@@ -27,8 +26,8 @@ export default {
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang='less' scoped>
   .home {
-    min-height:100%;
+    height:100%;
   }
 </style>

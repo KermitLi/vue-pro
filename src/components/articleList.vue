@@ -46,8 +46,8 @@
 </script>
 <style lang="less" scoped>
     .articleList {
-        width:100%;
-        height:27.4rem;
+        width: 100%;
+        height: 93.3%;
         border:1px solid #000;
 
         .contents {

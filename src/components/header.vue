@@ -6,9 +6,9 @@
           </ut-col>
           <ut-col :span="5" :offset="15">
               <ut-nav mode='horizontal' active='n2'>
-                  <ut-nav-item index="n1">首页</ut-nav-item>
-                  <ut-nav-item index="n2">相册</ut-nav-item>
-                  <ut-nav-item index="n3">笔记</ut-nav-item>
+                  <ut-nav-item index="n1"><router-link to='/'>首页</router-link></ut-nav-item>
+                  <ut-nav-item index="n2"><router-link to='/albums'>相册</router-link></ut-nav-item>
+                  <ut-nav-item index="n3"><router-link to='/articles'>笔记</router-link></ut-nav-item>
               </ut-nav>
           </ut-col>
         </ut-row>
@@ -24,6 +24,8 @@ export default {
 <style lang="less" scoped>
   .navMenu {
     background-color:#20a0ff;
+    width: 100%;
+    height: 6.7%;
   }
 
   .title {

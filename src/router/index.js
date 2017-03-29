@@ -6,6 +6,7 @@ import login from '../views/login'
 import register from '../views/register'
 import uploadPhoto from '../components/uploadPhoto.vue';
 import post from '../views/post';
+import albums from '../views/albums.vue';
 
 Vue.use(Router);
 Vue.use(vueResouce);
@@ -37,6 +38,11 @@ var router = new Router({
       path:'/photo/upload',
       name:'uploadPhoto',
       component:uploadPhoto
+  },
+  {
+      path:'/albums',
+      name:"/albums",
+      component:albums
   }
   ]
 });
