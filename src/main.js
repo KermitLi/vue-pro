@@ -6,9 +6,12 @@ import router from './router'
 import $http from 'vue-resource'
 import utear from 'vue-utear'
 import  "vue-utear/dist/vue-utear.css"
+import vueMaterial from 'vue-material';
+import 'vue-material/dist/vue-material.css';
 
 Vue.use($http);
 Vue.use(utear);
+Vue.use(vueMaterial);
 
 
 /* eslint-disable no-new */

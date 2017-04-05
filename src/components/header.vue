@@ -1,17 +1,16 @@
 <template lang="html">
   <div class="navMenu">
-        <ut-row>
-          <ut-col :span=1 :offset=1>
-              <span class='title'>Kermit</span>
-          </ut-col>
-          <ut-col :span="5" :offset="15">
-              <ut-nav mode='horizontal' active='n2'>
-                  <ut-nav-item index="n1"><router-link to='/'>首页</router-link></ut-nav-item>
-                  <ut-nav-item index="n2"><router-link to='/albums'>相册</router-link></ut-nav-item>
-                  <ut-nav-item index="n3"><router-link to='/articles'>笔记</router-link></ut-nav-item>
-              </ut-nav>
-          </ut-col>
-        </ut-row>
+    <md-toolbar md-theme="blue" style='color:white'>
+        <md-button class="md-icon-button">
+            <md-icon>menu</md-icon>
+        </md-button>
+
+        <h2 class="md-title" style="flex: 1">Default</h2>
+
+        <md-button class="md-icon-button">
+            <md-icon>favorite</md-icon>
+        </md-button>
+    </md-toolbar>
   </div>
 </template>
 

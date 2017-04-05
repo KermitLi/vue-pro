@@ -1,17 +1,40 @@
 <template>
     <div class="albums">
-        <ut-row class='contents'>
-            <ut-col :span='4'></ut-col>
-            <ut-col :span='16' class="albumList">
-                <div class="album" v-for='i in 20'>
-                  <router-link to="#" class="cover">
-                    <img src="../assets//images/logo.jpg" alt="">
-                  </router-link>
-                  <router-link class="name" to='#'>相册</router-link>
-                </div>
-            </ut-col>
-            <ut-col :span='4'></ut-col>
-        </ut-row>
+      <md-layout md-gutter>
+        <md-layout md-flex-xsmall="100" md-flex-small="10" md-flex-medium="20" md-flex-large="25" md-flex-xlarge="25">
+          md-flex-xsmall <br>
+          md-flex-small="50" <br>
+          md-flex-medium="33"
+        </md-layout>
+
+        <md-layout md-flex-xsmall="100" md-flex-small="80" md-flex-medium="60" md-flex-large="50" md-flex-xlarge="50" class="albums-container">
+          <md-card class="md-card" md-with-hover v-for="i in 5">
+            <md-card-media-cover md-text-scrim>
+              <md-card-media md-ratio="1:1">
+                <img src="../assets/images/logo.png" alt="Skyscraper">
+              </md-card-media>
+
+              <md-card-area>
+                <md-card-header>
+                  <div class="md-title">Title goes here</div>
+                  <div class="md-subhead">Subtitle here</div>
+                </md-card-header>
+
+                <md-card-actions>
+                  <md-button>Action</md-button>
+                  <md-button>Action</md-button>
+                </md-card-actions>
+              </md-card-area>
+            </md-card-media-cover>
+          </md-card>
+        </md-layout>
+
+        <md-layout md-flex-xsmall="100" md-flex-small="10" md-flex-medium="20" md-flex-large="25" md-flex-xlarge="25">
+          md-flex-xsmall <br>
+          md-flex-small="50" <br>
+          md-flex-medium="33"
+        </md-layout>
+      </md-layout>
     </div>
 </template>
 <script>
@@ -28,49 +51,11 @@ export default {
   .albums {
     height: 93.3%;
     border: 1px solid;
-    .contents {
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-
-      .utear-col {
-        height: 100%;  
-      }
-
-      .albumList {
-
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-around;
-          
-          .album {
-            width: 4rem;
-            height: 4rem;
-            margin-top: 1rem;
-            border: 1px solid;
-            text-align: center;
-
-            .cover {
-              width: 100%;
-              height: 100%;
-              display: block;
-
-              img {
-                width: 100%;
-                height: 100%;
-              }
-            }
-
-            .name {
-              font-size:0.45rem;
-              line-height: 2;
-              color: #039BE5;
-              display: inline-block;
-            }
-
-          }
-            
-        }
+    
+    .md-card {
+      width: 30%;
+      margin-top: 3%;
+      margin-left: 3%;
     }
   }
 </style>

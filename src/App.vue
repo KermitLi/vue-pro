@@ -10,7 +10,7 @@ export default {
 }
 </script>
 <style lang='less'>
-@import './assets//css/material-icons.css';
+@import './assets/css/material-icons.css';
 @font-face {
   font-family:'Source Sans Pro';
   src:url('./assets/fonts/SourceSansPro-Regular.ttf');
