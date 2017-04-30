@@ -19,60 +19,67 @@
 <script>
 import md5 from 'md5';
 export default {
-  name:'register',
-  data(){
-      return {
-          userName:'',
-          userEmail:'',
-          userPwd:'',
-          userConfirmPwd:'',
-          logoUrl:'/static/img/logo.3456857.jpg'
-      }
-  },
-  methods:{
-      validate(){
-          return true;
-      },
-      register(){
-          if(this.validate()){
-              let userInfo = {
-                  name:this.userName,
-                  email:md5(this.userEmail),
-                  pwd:md5(this.userPwd),
-                  logoUrl:this.logoUrl
-              }
-              this.$http.post('/api/register',userInfo).then((res)=>{
-                  if(res.data){
-                      alert("注册成功");
-                      this.$router.push({path:'/login'});
-                  }
-                  else{
-                      alert("注册失败");
-                  }
-              },(err)=>alert('请求错误'));
-          }
-      },
-      check(){
-          this.$http.post('/api/checkName',{name:this.userName}).then((res)=>{
-              console.log(res.data);
-          },(err)=>alert('请求错误'))
-      }
-  }
+    name: 'register',
+    data() {
+        return {
+            userName: '',
+            userEmail: '',
+            userPwd: '',
+            userConfirmPwd: '',
+            logoUrl: '/static/img/logo.3456857.jpg'
+        }
+    },
+    methods: {
+        validate() {
+            return true;
+        },
+        register() {
+            if (this.validate()) {
+                let userInfo = {
+                    name: this.userName,
+                    email: md5(this.userEmail),
+                    pwd: md5(this.userPwd),
+                    logoUrl: this.logoUrl
+                }
+                this.$http.post('/api/register', userInfo).then((res) => {
+                    if (res.data) {
+                        alert("注册成功");
+                        this.$router.push({ path: '/login' });
+                    }
+                    else {
+                        alert("注册失败");
+                    }
+                }, (err) => alert('请求错误'));
+            }
+        },
+        check() {
+            this.$http.post('/api/checkName', { name: this.userName }).then((res) => {
+                console.log(res.data);
+            }, (err) => alert('请求错误'))
+        }
+    }
 }
 </script>
 
 <style lang="less" scoped>
-    div.login {
-        margin-top: 10%;
-        .logo   {
-            max-width: 100%;
-            border-radius: 100%;
-        }
-
-        .user-pwd,.user-name,.user-email, .user-confirm-pwd,.register {
-            margin-top: 7%;
-        }
-
+div.login {
+    margin-top: 10%;
+    .logo {
+        max-width: 100%;
+        border-radius: 100%;
     }
 
+    .user-pwd,
+    .user-name,
+    .user-email,
+    .user-confirm-pwd,
+    .register {
+        margin-top: 10%;
+    }
+
+    .register {
+        margin-left: 50%;
+        transform: translateX(-50%);
+    }
+}
 </style>

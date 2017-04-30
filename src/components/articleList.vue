@@ -41,93 +41,91 @@
     </div>
 </template>
 <script lang="">
-    export default {
-    }
+export default {
+}
 </script>
 <style lang="less" scoped>
-    .articleList {
-        width: 100%;
-        height: 93.3%;
-        border:1px solid #000;
+.articleList {
+    width: 100%;
+    height: 93.3%;
+    border: 1px solid #000;
 
-        .contents {
-            height:100%;
+    .contents {
+        height: 100%;
 
-            .utear-col {
-                height:100%;
+        .utear-col {
+            height: 100%;
 
-                .utear-card {
-                    margin-top:1rem;
-                    // border:none;
-                    .utear-card-header {
-                        .headPic {
-                            float:left;
-                        }
-
-                        .articleInfo {
-                            display:inline-block;
-                            float:left;
-                            margin-left:0.6rem;
-                            
-                            .author {
-                                display:block;
-                                color:#212121;
-                                font-weight:600;
-                                font-size:0.5rem;
-                                text-align:left;
-                            }
-
-                            .time {
-                                display:block;
-                                margin-top:0.3rem;
-                                font-size:0.45rem;
-                                color:#BDBDBD;
-                            }
-                        }
-
-                        .edit {
-                            cursor:pointer;
-                        }
+            .utear-card {
+                margin-top: 1rem; // border:none;
+                .utear-card-header {
+                    .headPic {
+                        float: left;
                     }
-                    
-                    .utear-card-body {
-                        .article-title {
-                            font-size:0.7rem;
-                            color:#03A9F4;
-                            white-space:nowrap;
-                            overflow:hidden;
-                            text-overflow:ellipsis;
+
+                    .articleInfo {
+                        display: inline-block;
+                        float: left;
+                        margin-left: 0.6rem;
+
+                        .author {
+                            display: block;
+                            color: #212121;
+                            font-weight: 600;
+                            font-size: 0.5rem;
+                            text-align: left;
                         }
 
-                        .article-title:hover{
-                            color:#0288D1;
-                        }
-
-                        .article-content {
-                            font-size:0.6rem;
-                            line-height: 1.4;
-                            word-break: break-all;
-                            color:#424242;
-                            height: 5rem;
-                            margin-top: 0.4rem;
-                            overflow : hidden;
+                        .time {
+                            display: block;
+                            margin-top: 0.3rem;
+                            font-size: 0.45rem;
+                            color: #BDBDBD;
                         }
                     }
 
-                    .readMore {
-                        font-size:0.5rem;
-                        color:#4FC3F7;
-                        position: absolute;
-                        right: 1rem;
-                        bottom: 0.4rem;
-                    }
-
-                    .readMore:hover{
-                        color:#29B6F6;
+                    .edit {
+                        cursor: pointer;
                     }
                 }
 
+                .utear-card-body {
+                    .article-title {
+                        font-size: 0.7rem;
+                        color: #03A9F4;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .article-title:hover {
+                        color: #0288D1;
+                    }
+
+                    .article-content {
+                        font-size: 0.6rem;
+                        line-height: 1.4;
+                        word-break: break-all;
+                        color: #424242;
+                        height: 5rem;
+                        margin-top: 0.4rem;
+                        overflow: hidden;
+                    }
+                }
+
+                .readMore {
+                    font-size: 0.45rem;
+                    color: #4FC3F7;
+                    position: absolute;
+                    right: 1rem;
+                    bottom: 0.1rem;
+                }
+
+                .readMore:hover {
+                    color: #29B6F6;
+                }
             }
         }
     }
+}
 </style>
