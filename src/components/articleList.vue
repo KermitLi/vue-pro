@@ -38,6 +38,9 @@
             </ut-col>
             <ut-col :span='4'></ut-col>
         </ut-row>
+        <md-button class="md-fab add">
+            <md-icon>edit</md-icon>
+        </md-button>
     </div>
 </template>
 <script lang="">
@@ -126,6 +129,13 @@ export default {
                 }
             }
         }
+    }
+
+    .add {
+        position: fixed;
+        bottom: 7%;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 </style>
