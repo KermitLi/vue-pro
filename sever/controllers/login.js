@@ -1,24 +1,27 @@
 const jwt = require('koa-jwt');
-module.exports = function * (next){
-    let userInfo = this.request.body;
-    let result = yield this.db.models.users.findOne({where:{name:userInfo.name}});
-    let message = '';
-    let state = false;
-    if(result===null){
-        message = '用户不存在';
-        this.body = {state,message};
+module.exports = function* (next) {
+  let userInfo = this.request.body;
+  let result = yield this.db.models.users.findOne({
+    where: {
+      name: userInfo.name
     }
-    else {
-        if(result.pwd===userInfo.pwd){
-            state  = true;
-            let secret = 'Kermit';
-            let token = jwt.sign(userInfo,secret);
-            this.body = {state:true,token:token};
-        }
-        else {
-            message='密码错误';
-            state = false;
-            this.body = {state,message};
-        }
+  });
+  if (result === null) {
+    this.body = {
+      state: 1
+    };
+  } else {
+    if (result.pwd === userInfo.pwd) {
+      let secret = 'Kermit';
+      let token = jwt.sign(userInfo, secret);
+      this.body = {
+        state: 0,
+        token: token
+      };
+    } else {
+      this.body = {
+        state: 2
+      };
     }
+  }
 }

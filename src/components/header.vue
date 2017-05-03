@@ -16,36 +16,38 @@
 
 <script>
 export default {
-  name:'header'
+    name: 'header'
 }
 </script>
 
 <style lang="less" scoped>
-  .navMenu {
-    background-color:#20a0ff;
+.navMenu {
+    background-color: #20a0ff;
     width: 100%;
-    height: 6.7%;
-  }
+    height: 10%;
+}
 
-  .title {
+.title {
     color: white;
     line-height: 2rem;
-    font-size:0.9rem;
-    font-weight:bold;
-  }
+    font-size: 0.9rem;
+    font-weight: bold;
+}
 
-  .utear-menu {
-      background-color: #20a0ff!important;
-     .utear-menu-item {
-         color: #fff!important;
-         font-size:0.6rem;
-     }
-     .is-active {
-         color: #000!important;
-     }
-  }
+.utear-menu {
+    background-color: #20a0ff!important;
+    .utear-menu-item {
+        color: #fff!important;
+        font-size: 0.6rem;
+    }
+    .is-active {
+        color: #000!important;
+    }
+}
 
-  .utear-menu,.utear-submenu,.utear-submenu__title{
-      height: 1.1rem!important;
-  }
+.utear-menu,
+.utear-submenu,
+.utear-submenu__title {
+    height: 1.1rem!important;
+}
 </style>

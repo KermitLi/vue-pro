@@ -13,6 +13,11 @@
                         <ut-button class="register" type="primary" size='large' @click.native='register'>注册</ut-button>
                     </ut-col>
             </ut-row>
+            <ut-row >
+                <ut-col :span="6" :offset="9" class='login-con'>
+                    <router-link class='login' to='/login'>已有账户？去登录</router-link>
+                </ut-col>
+            </ut-row>
         </ut-layout>
     </div>
 </template>
@@ -26,25 +31,54 @@ export default {
             userEmail: '',
             userPwd: '',
             userConfirmPwd: '',
-            logoUrl: '/static/img/logo.3456857.jpg'
+            logoUrl: '/static/img/logo.3456857.jpg',
+            userNameUnique: true
         }
     },
     methods: {
         validate() {
-            return true;
+            if (0 === this.userName.length) {
+                this.$message.error('用户名不能为空');
+                return false;
+            }
+            else if (0 === this.userEmail.length) {
+                this.$message.error('电子邮箱不能为空');
+                return false;
+            }
+            else if (!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(this.userEmail)) {
+                this.$message.error('非法的电子邮箱');
+                return false;
+            }
+            else if (0 === this.userPwd.length) {
+                this.$message.error('密码不能为空');
+                return false;
+            }
+            else if (0 === this.userConfirmPwd.length) {
+                this.$message.error('请确认密码');
+                return false;
+            }
+            else if (this.userConfirmPwd !== this.userPwd) {
+                this.$message.error('两次密码不一致');
+                return false;
+            }
+            else {
+                return true;
+            }
         },
         register() {
-            if (this.validate()) {
+            if (this.validate() && this.userNameUnique) {
                 let userInfo = {
-                    name: this.userName,
-                    email: md5(this.userEmail),
+                    name: this.userName.toLowerCase(),
+                    email: md5(this.userEmail.toLowerCase()),
                     pwd: md5(this.userPwd),
                     logoUrl: this.logoUrl
                 }
                 this.$http.post('/api/register', userInfo).then((res) => {
                     if (res.data) {
-                        alert("注册成功");
-                        this.$router.push({ path: '/login' });
+                        this.$message.success("注册成功");
+                        setTimeout(() => {
+                            this.$router.push({ path: '/login' });
+                        }, 1000);
                     }
                     else {
                         alert("注册失败");
@@ -54,7 +88,10 @@ export default {
         },
         check() {
             this.$http.post('/api/checkName', { name: this.userName }).then((res) => {
-                console.log(res.data);
+                if (!res.data) {
+                    this.$message.error('用户名已存在');
+                    this.userNameUnique = false;
+                }
             }, (err) => alert('请求错误'))
         }
     }
@@ -63,7 +100,7 @@ export default {
 
 <style lang="less" scoped>
 div.login {
-    margin-top: 10%;
+    margin-top: 3%;
     .logo {
         max-width: 100%;
         border-radius: 100%;
@@ -80,6 +117,14 @@ div.login {
     .register {
         margin-left: 50%;
         transform: translateX(-50%);
+    }
+
+    .login-con {
+        text-align: center;
+        .login {
+            display: inline-block;
+            margin-top: 10%;
+        }
     }
 }
 </style>

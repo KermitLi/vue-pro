@@ -22,15 +22,6 @@
                         <article class="article-content">
                         Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制dawfsefsgr
                         Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
                         </article>
                     </div>
                     <router-link to='#' class='readMore'>查看更多</router-link>
@@ -50,7 +41,7 @@ export default {
 <style lang="less" scoped>
 .articleList {
     width: 100%;
-    height: 93.3%;
+    height: 90%;
     border: 1px solid #000;
 
     .contents {
