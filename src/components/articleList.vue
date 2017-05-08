@@ -1,26 +1,31 @@
-<template lang="html">
+<template>
     <div class="articleList">
         <ut-row class='contents'>
             <ut-col :span='4'></ut-col>
             <ut-col :span='16' style='overflow:auto;'>
                 <ut-card v-for='item in articles'>
                     <div slot="header" class='clearFix'>
-                        <router-link to='#' class='headPic'><img :src='item.logoUrl' alt="" class='avatar'></router-link>
+                        <router-link to='#' class='headPic'>
+                            <img :src='item.logoUrl' alt="" class='avatar'>
+                        </router-link>
                         <div class="articleInfo">
-                            <span class='author'>{{item.userName}}</span><span class='time'>{{item.time}}</span>
+                            <span class='author'>{{item.userName}}</span>
+                            <span class='time'>{{item.time}}</span>
                         </div>
                         <ut-dropdown style="float: right;" v-if='item.userName==userName'>
-                                <i class="material-icons edit">mode_edit</i>
-                                <template slot='dropdown'>
-                                    <ut-dropdown-item><router-link :to='"/article/edit/"+item.id'>编辑</router-link></ut-dropdown-item>
-                                    <ut-dropdown-item>删除</ut-dropdown-item>
-                                </template>
+                            <i class="material-icons edit">mode_edit</i>
+                            <template slot='dropdown'>
+                                <ut-dropdown-item>
+                                    <router-link :to='"/article/edit/"+item.id'>编辑</router-link>
+                                </ut-dropdown-item>
+                                <ut-dropdown-item>删除</ut-dropdown-item>
+                            </template>
                         </ut-dropdown>
                     </div>
                     <div>
                         <router-link to='#' class="article-title">{{item.title}}</router-link>
                         <article class="article-content">
-                        {{item.contents}}
+                            {{item.contents}}
                         </article>
                     </div>
                     <router-link to='#' class='readMore'>查看更多</router-link>
@@ -30,8 +35,8 @@
         </ut-row>
         <router-link to='/article/post'>
             <md-button class="md-fab add">
-            <md-icon>edit</md-icon>
-        </md-button>
+                <md-icon>edit</md-icon>
+            </md-button>
         </router-link>
     </div>
 </template>
@@ -95,12 +100,21 @@ export default {
         }
     },
     created(){
-        console.log(this.$route.params.userName);
         if(this.$route.params.userName){
-            this.getArticles(this.$route.params.userName);
+            this.getArticles(this.userName);
         }
         else{
             this.getArticles();
+        }
+    },
+    watch: {
+        '$route' (to, from) {
+            if(to.path=='/'&&from.path=='/articles/'+this.userName){
+                this.getArticles();
+            }
+            else if(to.path=='/articles/'+this.userName&&from.path=='/'){
+                this.getArticles(this.userName);
+            }
         }
     }
 }

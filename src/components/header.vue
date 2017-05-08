@@ -26,7 +26,7 @@
                     </router-link>
                 </md-list-item>
                 <md-list-item>
-                    <router-link to='#'>
+                    <router-link to='/albums'>
                         <md-icon>collections</md-icon>
                         <span>相册列表</span>
                     </router-link>
@@ -57,15 +57,15 @@ export default {
     props:['userName'],
     methods:{
         toggleLeftSidenav() {
-        this.$refs.leftSidenav.toggle();
-    },
-    getAvatar(){
-            let userName = this.userName;
-            this.$http.get('/api/avatar', { params:{userName} }).then((res) => {
-                    if (res.data.state) {
-                        this.logoUrl=res.data.url;
-                    }
-                });
+            this.$refs.leftSidenav.toggle();
+        },
+        getAvatar(){
+                let userName = this.userName;
+                this.$http.get('/api/avatar', { params:{userName} }).then((res) => {
+                        if (res.data.state) {
+                            this.logoUrl=res.data.url;
+                        }
+                    });
         }
     }
 }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import vueResouce from 'vue-resource';
 import Router from 'vue-router'
 
-import home from '../views/home'
+import home from '../views/home';
 
 import login from '../views/login'
 import register from '../views/register'
@@ -59,7 +59,7 @@ var router = new Router({
     },
     {
       path: '/albums',
-      name: "/albums",
+      name: "albums",
       component: albums
     }
   ]

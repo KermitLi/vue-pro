@@ -19,6 +19,9 @@ var saveDraft = require('../controllers/saveDraft.js');
 var getDraft = require('../controllers/getDraft.js');
 var getArticleContent = require('../controllers/getArticleContent.js');
 
+var createAlbum = require('../controllers/createAlbum.js');
+var updateAlbum = require('../controllers/updateAlbum.js');
+var getAlbums = require('../controllers/getAlbums.js');
 var uploadPhoto = require('../controllers/uploadPhoto.js');
 var getPhoto = require('../controllers/getPhoto.js');
 
@@ -32,13 +35,16 @@ router.get('/avatar', getAvatar); //获取头像
 //文章系列
 router.post('/postArticle', postArticle); //发表文章
 router.get('/getArticle', getArticle); //获取文章
-router.post('/updateArticle',updateArticle); //更新文章
+router.post('/updateArticle', updateArticle); //更新文章
 router.get('/deleteArticle', deleteArticle);
 router.get('/getDraft', getDraft);
 router.post('/saveDraft', saveDraft);
 router.get('/getArticleContent', getArticleContent)
 
 //图片上传
+router.post('/createAlbum', createAlbum);
+router.get('/getAlbums', getAlbums);
+router.post('/updateAlbum', updateAlbum);
 router.post('/uploadPhoto', uploadPhoto);
 router.post('/getPhoto', getPhoto);
 
