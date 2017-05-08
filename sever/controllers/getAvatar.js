@@ -1,7 +1,9 @@
 module.exports = function* () {
   let userName = this.query.userName;
   var result = yield this.db.models.users.findOne({
-    userName
+    where: {
+      name: userName
+    }
   });
 
   if (result) {

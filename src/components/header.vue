@@ -1,22 +1,73 @@
-<template lang="html">
-  <div class="navMenu">
-    <md-toolbar md-theme="blue" style='color:white'>
-        <md-button class="md-icon-button">
-            <md-icon>menu</md-icon>
-        </md-button>
-
-        <h2 class="md-title" style="flex: 1">Default</h2>
-
-        <md-button class="md-icon-button">
-            <md-icon>favorite</md-icon>
-        </md-button>
-    </md-toolbar>
-  </div>
+<template>
+    <div class="navMenu">
+        <md-toolbar md-theme="blue" style='color:white'>
+            <md-button class="md-icon-button" @click.native="toggleLeftSidenav">
+                <md-icon>menu</md-icon>
+            </md-button>
+        </md-toolbar>
+        <md-sidenav class="md-left" ref="leftSidenav">
+            <md-toolbar class="md-large" md-primary>
+                <md-avatar class="md-avatar-icon md-large">
+                    <img :src='logoUrl' alt="">
+                </md-avatar>
+            </md-toolbar>
+    
+            <md-list>
+                <md-list-item>
+                    <router-link to='/'>
+                        <md-icon>home</md-icon>
+                        <span>首页</span>
+                    </router-link>
+                </md-list-item>
+                <md-list-item>
+                    <router-link :to='"/articles/"+userName'>
+                        <md-icon>description</md-icon>
+                        <span>文章列表</span>
+                    </router-link>
+                </md-list-item>
+                <md-list-item>
+                    <router-link to='#'>
+                        <md-icon>collections</md-icon>
+                        <span>相册列表</span>
+                    </router-link>
+                </md-list-item>
+                <md-list-item>
+                    <router-link to='#'>
+                        <md-icon>fiber_new</md-icon>
+                        <span>技术新闻</span>
+                    </router-link>
+                </md-list-item>
+            </md-list>
+            <md-button class="signOut">
+                <md-icon>input</md-icon>
+                <span>退出登录</span>
+            </md-button>
+        </md-sidenav>
+    </div>
 </template>
 
 <script>
 export default {
-    name: 'header'
+    name: 'header',
+    data(){
+        return {
+            logoUrl:'/photos/logo.jpg'
+        }
+    },
+    props:['userName'],
+    methods:{
+        toggleLeftSidenav() {
+        this.$refs.leftSidenav.toggle();
+    },
+    getAvatar(){
+            let userName = this.userName;
+            this.$http.get('/api/avatar', { params:{userName} }).then((res) => {
+                    if (res.data.state) {
+                        this.logoUrl=res.data.url;
+                    }
+                });
+        }
+    }
 }
 </script>
 
@@ -25,6 +76,29 @@ export default {
     background-color: #20a0ff;
     width: 100%;
     height: 10%;
+
+    .md-avatar.md-large.md-large {
+        width: 80px;
+        min-width: 80px;
+        height: 80px;
+        min-height: 80px;
+        border-radius: 80px;
+    }
+
+    .md-list-item:hover {
+        background-color: #E0E0E0;
+    }
+
+    .signOut {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 9%;
+        color: #f44336;
+        font-size: 0.6rem;
+        font-weight: bold;
+        letter-spacing: 0.15rem;
+    }
 }
 
 .title {

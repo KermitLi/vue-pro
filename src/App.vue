@@ -47,6 +47,10 @@ a {
   display: block;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 img {
   display: block;
 }

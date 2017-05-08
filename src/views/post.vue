@@ -2,7 +2,7 @@
     <div class="post">
         <ut-row>
             <ut-col :span='4'>
-                <md-button class="md-icon-button">
+                <md-button class="md-icon-button" @click.native='back'>
                     <md-icon>arrow_back</md-icon>
                 </md-button>
             </ut-col>
@@ -15,17 +15,20 @@
                     <md-button class="md-icon-button" style="float:right" md-menu-trigger>
                         <md-icon>more_vert</md-icon>
                     </md-button>
-                    <md-menu-content>
-                        <md-menu-item>保存草稿</md-menu-item>
+                    <md-menu-content v-if='type=="post"'>
+                        <md-menu-item @click.native='saveDraft'>保存草稿</md-menu-item>
                         <md-menu-item @click.native='postArticle'>发表</md-menu-item>
                         <md-menu-item :disabled='clearDisabled' @click.native='clear'>清空内容</md-menu-item>
+                    </md-menu-content>
+                    <md-menu-content v-else>
+                        <md-menu-item @click.native='updateArticle'>保存更改</md-menu-item>
                     </md-menu-content>
                 </md-menu>
             </ut-col>
         </ut-row>
     </div>
 </template>
-<script lang="">
+<script>
 const jwt = require('koa-jwt');
 const moment = require('moment');
 
@@ -39,7 +42,8 @@ export default {
                     codeSyntaxHighlighting: true, // 开启代码高亮
                     highlightingTheme: 'atom-one-light' // 自定义代码高亮主题，可选列表(https://github.com/isagalaev/highlight.js/tree/master/src/styles)
                 }
-            }
+            },
+            type:'post'
         }
     },
     computed: {
@@ -51,6 +55,9 @@ export default {
         clear() {
             this.title = '';
             this.content = '';
+        },
+        back(){
+            this.$router.go(-1);
         },
         validate() {
             if (0 === this.title.length) {
@@ -67,7 +74,7 @@ export default {
             if (this.validate()) {
                 let title = this.title;
                 let contents = this.content;
-                let time = moment().format('YYYY.MM.DD');
+                let time = moment().format('YYYY-MM-DD HH:mm:ss');
                 let token = sessionStorage.getItem('token');
                 if (token !== null && token !== 'null') {
                     var userName = jwt.verify(token, 'Kermit').name;
@@ -76,7 +83,7 @@ export default {
                     this.$router.push({ path: '/login' });
                 }
 
-                let article = { title, contents, time, userName };
+                let article = { title, contents,userName,time};
                 this.$http.post('/api/postArticle', article).then((res) => {
                     if (res.data) {
                         this.$message.success('发表成功');
@@ -89,6 +96,105 @@ export default {
                     this.$message.error('服务器错误');
                 });
             }
+        },
+        getArticle(id){
+            let token = sessionStorage.getItem('token');
+            var userName = jwt.verify(token, 'Kermit').name;
+           if (token !== null && token !== 'null') {
+                    this.$http.get('/api/getArticleContent', {params:{id}}).then((res) => {
+                        if (res.data) {
+                            this.title = res.data.title;
+                            this.content = res.data.contents;
+                        }
+                        else{
+                            this.$message.error('获取文章内容失败');
+                        }
+                    }, () => {
+                        this.$message.error('服务器错误');
+                    });
+            }
+            else {
+                this.$router.push({ path: '/login' });
+            }
+        },
+        updateArticle(){
+            if (this.validate()) {
+                let title = this.title;
+                let contents = this.content;
+                let id = this.$route.params.id;
+                let token = sessionStorage.getItem('token');
+                if (token !== null && token !== 'null') {
+                    var userName = jwt.verify(token, 'Kermit').name;
+                }
+                else {
+                    this.$router.push({ path: '/login' });
+                }
+
+                let article = { title, contents,userName,id };
+                this.$http.post('/api/updateArticle', article,).then((res) => {
+                    if (res.data) {
+                        this.$message.success('更改成功');
+                        this.$router.go(-1);
+                    }
+                    else {
+                        this.$message.error('更改失败');
+                    }
+                }, () => {
+                    this.$message.error('服务器错误');
+                });
+            }
+        },
+        saveDraft(){
+            if(this.validate()){
+                let title = this.title;
+                let contents = this.content;
+                let token = sessionStorage.getItem('token');
+                if (token !== null && token !== 'null') {
+                    var userName = jwt.verify(token, 'Kermit').name;
+                }
+                else {
+                    this.$router.push({ path: '/login' });
+                }
+
+                let draft = { title, contents,userName };
+                this.$http.post('/api/saveDraft', draft).then((res) => {
+                    if (res.data) {
+                        this.$message.success('保存成功');
+                    }
+                    else {
+                        this.$message.error('保存失败');
+                    }
+                }, () => {
+                    this.$message.error('服务器错误');
+                });
+
+            }
+        },
+        getDraft(){
+            let token = sessionStorage.getItem('token');
+            var userName = jwt.verify(token, 'Kermit').name;
+           if (token !== null && token !== 'null') {
+                    this.$http.get('/api/getDraft', {params:{userName}}).then((res) => {
+                        if (res.data) {
+                            this.title = res.data.title;
+                            this.content = res.data.contents;
+                        }
+                    }, () => {
+                        this.$message.error('获取草稿失败');
+                    });
+            }
+            else {
+                this.$router.push({ path: '/login' });
+            }          
+        }
+    },
+    created(){
+        if(this.$route.params.id){
+            this.type='edit';
+            this.getArticle(this.$route.params.id);
+        }
+        else{
+            this.getDraft();
         }
     }
 }

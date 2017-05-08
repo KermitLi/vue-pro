@@ -2,26 +2,25 @@
     <div class="articleList">
         <ut-row class='contents'>
             <ut-col :span='4'></ut-col>
-            <ut-col :span='16'>
-                <ut-card>
+            <ut-col :span='16' style='overflow:auto;'>
+                <ut-card v-for='item in articles'>
                     <div slot="header" class='clearFix'>
-                        <router-link to='#' class='headPic'><img src="../assets/images/logo.jpg" alt="" class=' avatar'></router-link>
+                        <router-link to='#' class='headPic'><img :src='item.logoUrl' alt="" class='avatar'></router-link>
                         <div class="articleInfo">
-                            <span class='author'>李炫</span><span class='time'>2016.03.22</span>
+                            <span class='author'>{{item.userName}}</span><span class='time'>{{item.time}}</span>
                         </div>
-                        <ut-dropdown style="float: right;">
+                        <ut-dropdown style="float: right;" v-if='item.userName==userName'>
                                 <i class="material-icons edit">mode_edit</i>
                                 <template slot='dropdown'>
-                                    <ut-dropdown-item>编辑</ut-dropdown-item>
+                                    <ut-dropdown-item><router-link :to='"/article/edit/"+item.id'>编辑</router-link></ut-dropdown-item>
                                     <ut-dropdown-item>删除</ut-dropdown-item>
                                 </template>
                         </ut-dropdown>
                     </div>
                     <div>
-                        <router-link to='#' class="article-title">Javascript中的闭包机制</router-link>
+                        <router-link to='#' class="article-title">{{item.title}}</router-link>
                         <article class="article-content">
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制dawfsefsgr
-                        Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制Javascript中的闭包机制
+                        {{item.contents}}
                         </article>
                     </div>
                     <router-link to='#' class='readMore'>查看更多</router-link>
@@ -29,13 +28,81 @@
             </ut-col>
             <ut-col :span='4'></ut-col>
         </ut-row>
-        <md-button class="md-fab add">
+        <router-link to='/article/post'>
+            <md-button class="md-fab add">
             <md-icon>edit</md-icon>
         </md-button>
+        </router-link>
     </div>
 </template>
 <script lang="">
+const jwt = require('koa-jwt');
+const moment = require('moment');
 export default {
+    data(){
+        return{
+            articles:[],
+        }
+    },
+    props:['userName'],
+    methods:{
+        getArticles(userName){
+            if(userName){
+                this.$http.get('/api/getArticle',{params:{userName}}).then((res)=>{
+                this.articles = res.data;
+                this.articles.forEach((item,id)=>{
+                    this.getAvatar(item.userName,id);
+                    this.$set(this.articles[id],'time',moment(item.time,'YYYY-MM-DD HH:mm:ss').fromNow())
+                });
+                this.articles.sort((a,b)=>{
+                    if(moment(a.time,'YYYY-MM-DD HH:mm:ss').isAfter(b.time)){
+                        return -1;
+                    }
+                    else{
+                        return 1;
+                    } 
+                });                   
+                },(err)=>{
+                    this.$message.error('获取文章列表失败');
+                });
+            }
+            else{
+                this.$http.get('/api/getArticle').then((res)=>{
+                this.articles = res.data; 
+                this.articles.forEach((item,id)=>{
+                    this.getAvatar(item.userName,id);
+                    this.$set(this.articles[id],'time',moment(item.time,'YYYY-MM-DD HH:mm:ss').fromNow())
+                }); 
+                this.articles.sort((a,b)=>{
+                    if(moment(a.time,'YYYY-MM-DD HH:mm:ss').isAfter(b.time)){
+                        return -1;
+                    }
+                    else{
+                        return 1;
+                    } 
+                });                 
+                },(err)=>{
+                    this.$message.error('获取文章列表失败');
+                });
+            }
+        },
+        getAvatar(userName,id){
+            this.$http.get('/api/avatar', { params:{userName} }).then((res) => {
+                    if (res.data.state) {
+                        this.$set(this.articles[id],'logoUrl',res.data.url);
+                    }
+                });
+        }
+    },
+    created(){
+        console.log(this.$route.params.userName);
+        if(this.$route.params.userName){
+            this.getArticles(this.$route.params.userName);
+        }
+        else{
+            this.getArticles();
+        }
+    }
 }
 </script>
 <style lang="less" scoped>
@@ -43,6 +110,10 @@ export default {
     width: 100%;
     height: 90%;
     border: 1px solid #000;
+
+    a:hover {
+        text-decoration: none!important;
+    }
 
     .contents {
         height: 100%;
@@ -86,6 +157,7 @@ export default {
                 .utear-card-body {
                     .article-title {
                         font-size: 0.7rem;
+                        line-height: 1.3;
                         color: #03A9F4;
                         white-space: nowrap;
                         overflow: hidden;
@@ -101,7 +173,7 @@ export default {
                         line-height: 1.4;
                         word-break: break-all;
                         color: #424242;
-                        height: 5rem;
+                        height: 2.5rem;
                         margin-top: 0.4rem;
                         overflow: hidden;
                     }

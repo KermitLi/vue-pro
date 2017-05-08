@@ -1,5 +1,5 @@
 module.exports = function (db, Sequelize) {
-  var result = db.define("article", {
+  var result = db.define('draft', {
     title: {
       type: Sequelize.STRING(100)
     },
@@ -8,13 +8,11 @@ module.exports = function (db, Sequelize) {
     },
     userName: {
       type: Sequelize.STRING(30)
-    },
-    time: {
-      type: Sequelize.STRING(30)
     }
   }, {
     timestamps: true,
     freezeTableName: true
   });
+
   return result;
-};
+}

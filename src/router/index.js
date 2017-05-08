@@ -23,6 +23,11 @@ var router = new Router({
       component: home
     },
     {
+      path: '/articles/:userName',
+      name: 'myArticles',
+      component: home
+    },
+    {
       path: '/login',
       name: 'login',
       component: login
@@ -40,6 +45,11 @@ var router = new Router({
     {
       path: '/article/post',
       name: 'post',
+      component: post
+    },
+    {
+      path: '/article/edit/:id',
+      name: 'edit',
       component: post
     },
     {
