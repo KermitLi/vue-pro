@@ -28,7 +28,7 @@ export default {
         return {
             userName: '',
             userPwd: '',
-            logoUrl: '/static/img/logo.3456857.jpg'
+            logoUrl: '/photos/logo.jpg'
         }
     },
     methods: {
@@ -76,7 +76,7 @@ export default {
         getAvatar() {
             if (0 < this.userName.length) {
                 let userName = this.userName;
-                this.$http.get('/api/avatar', { params:{userName} }).then((res) => {
+                this.$http.get('/api/avatar', { params: { userName } }).then((res) => {
                     if (res.data.state) {
                         this.logoUrl = res.data.url;
                     }

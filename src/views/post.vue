@@ -2,7 +2,7 @@
     <div class="post">
         <ut-row>
             <ut-col :span='4'>
-                <md-button class="md-icon-button" @click.native='back'>
+                <md-button class="md-icon-button" md-size='large' @click.native='back'>
                     <md-icon>arrow_back</md-icon>
                 </md-button>
             </ut-col>
@@ -43,7 +43,7 @@ export default {
                     highlightingTheme: 'atom-one-light' // 自定义代码高亮主题，可选列表(https://github.com/isagalaev/highlight.js/tree/master/src/styles)
                 }
             },
-            type:'post'
+            type: 'post'
         }
     },
     computed: {
@@ -56,7 +56,7 @@ export default {
             this.title = '';
             this.content = '';
         },
-        back(){
+        back() {
             this.$router.go(-1);
         },
         validate() {
@@ -83,7 +83,7 @@ export default {
                     this.$router.push({ path: '/login' });
                 }
 
-                let article = { title, contents,userName,time};
+                let article = { title, contents, userName, time };
                 this.$http.post('/api/postArticle', article).then((res) => {
                     if (res.data) {
                         this.$message.success('发表成功');
@@ -97,27 +97,27 @@ export default {
                 });
             }
         },
-        getArticle(id){
+        getArticle(id) {
             let token = sessionStorage.getItem('token');
             var userName = jwt.verify(token, 'Kermit').name;
-           if (token !== null && token !== 'null') {
-                    this.$http.get('/api/getArticleContent', {params:{id}}).then((res) => {
-                        if (res.data) {
-                            this.title = res.data.title;
-                            this.content = res.data.contents;
-                        }
-                        else{
-                            this.$message.error('获取文章内容失败');
-                        }
-                    }, () => {
-                        this.$message.error('服务器错误');
-                    });
+            if (token !== null && token !== 'null') {
+                this.$http.get('/api/getArticleContent', { params: { id } }).then((res) => {
+                    if (res.data) {
+                        this.title = res.data.title;
+                        this.content = res.data.contents;
+                    }
+                    else {
+                        this.$message.error('获取文章内容失败');
+                    }
+                }, () => {
+                    this.$message.error('服务器错误');
+                });
             }
             else {
                 this.$router.push({ path: '/login' });
             }
         },
-        updateArticle(){
+        updateArticle() {
             if (this.validate()) {
                 let title = this.title;
                 let contents = this.content;
@@ -130,8 +130,8 @@ export default {
                     this.$router.push({ path: '/login' });
                 }
 
-                let article = { title, contents,userName,id };
-                this.$http.post('/api/updateArticle', article,).then((res) => {
+                let article = { title, contents, userName, id };
+                this.$http.post('/api/updateArticle', article, ).then((res) => {
                     if (res.data) {
                         this.$message.success('更改成功');
                         this.$router.go(-1);
@@ -144,8 +144,8 @@ export default {
                 });
             }
         },
-        saveDraft(){
-            if(this.validate()){
+        saveDraft() {
+            if (this.validate()) {
                 let title = this.title;
                 let contents = this.content;
                 let token = sessionStorage.getItem('token');
@@ -156,7 +156,7 @@ export default {
                     this.$router.push({ path: '/login' });
                 }
 
-                let draft = { title, contents,userName };
+                let draft = { title, contents, userName };
                 this.$http.post('/api/saveDraft', draft).then((res) => {
                     if (res.data) {
                         this.$message.success('保存成功');
@@ -170,30 +170,30 @@ export default {
 
             }
         },
-        getDraft(){
+        getDraft() {
             let token = sessionStorage.getItem('token');
             var userName = jwt.verify(token, 'Kermit').name;
-           if (token !== null && token !== 'null') {
-                    this.$http.get('/api/getDraft', {params:{userName}}).then((res) => {
-                        if (res.data) {
-                            this.title = res.data.title;
-                            this.content = res.data.contents;
-                        }
-                    }, () => {
-                        this.$message.error('获取草稿失败');
-                    });
+            if (token !== null && token !== 'null') {
+                this.$http.get('/api/getDraft', { params: { userName } }).then((res) => {
+                    if (res.data) {
+                        this.title = res.data.title;
+                        this.content = res.data.contents;
+                    }
+                }, () => {
+                    this.$message.error('获取草稿失败');
+                });
             }
             else {
                 this.$router.push({ path: '/login' });
-            }          
+            }
         }
     },
-    created(){
-        if(this.$route.params.id){
-            this.type='edit';
+    created() {
+        if (this.$route.params.id) {
+            this.type = 'edit';
             this.getArticle(this.$route.params.id);
         }
-        else{
+        else {
             this.getDraft();
         }
     }

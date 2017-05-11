@@ -7,7 +7,7 @@ module.exports = function (db, Sequelize) {
       type: Sequelize.STRING(40)
     },
     email: {
-      type: Sequelize.STRING(500)
+      type: Sequelize.STRING(100)
     },
     avatar_url: {
       type: Sequelize.STRING(100),

@@ -38,7 +38,7 @@
                     </router-link>
                 </md-list-item>
             </md-list>
-            <md-button class="signOut">
+            <md-button class="signOut" @click.native='signOut'>
                 <md-icon>input</md-icon>
                 <span>退出登录</span>
             </md-button>
@@ -49,23 +49,27 @@
 <script>
 export default {
     name: 'header',
-    data(){
+    data() {
         return {
-            logoUrl:'/photos/logo.jpg'
+            logoUrl: '/photos/logo.jpg'
         }
     },
-    props:['userName'],
-    methods:{
+    props: ['userName'],
+    methods: {
         toggleLeftSidenav() {
             this.$refs.leftSidenav.toggle();
         },
-        getAvatar(){
-                let userName = this.userName;
-                this.$http.get('/api/avatar', { params:{userName} }).then((res) => {
-                        if (res.data.state) {
-                            this.logoUrl=res.data.url;
-                        }
-                    });
+        getAvatar() {
+            let userName = this.userName;
+            this.$http.get('/api/avatar', { params: { userName } }).then((res) => {
+                if (res.data.state) {
+                    this.logoUrl = res.data.url;
+                }
+            });
+        },
+        signOut() {
+            sessionStorage.setItem('token', null);
+            this.$router.push({ path: '/login' });
         }
     }
 }

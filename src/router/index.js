@@ -8,8 +8,8 @@ import login from '../views/login'
 import register from '../views/register'
 import forgetPwd from '../views/forgetPwd'
 
-import uploadPhoto from '../components/uploadPhoto.vue';
 import albums from '../views/albums.vue';
+import photos from '../views/photos.vue';
 
 import post from '../views/post';
 
@@ -53,9 +53,9 @@ var router = new Router({
       component: post
     },
     {
-      path: '/photo/upload',
-      name: 'uploadPhoto',
-      component: uploadPhoto
+      path: '/albums/:albumId',
+      name: 'photos',
+      component: photos
     },
     {
       path: '/albums',

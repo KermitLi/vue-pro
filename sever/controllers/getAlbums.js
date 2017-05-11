@@ -1,9 +1,6 @@
 module.exports = function* () {
-  let userName = this.query.userName;
   var result = yield this.db.models.albums.findAll({
-    where: {
-      userName
-    }
+    where: this.query
   });
 
   this.body = result;

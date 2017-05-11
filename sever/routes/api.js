@@ -22,8 +22,11 @@ var getArticleContent = require('../controllers/getArticleContent.js');
 var createAlbum = require('../controllers/createAlbum.js');
 var updateAlbum = require('../controllers/updateAlbum.js');
 var getAlbums = require('../controllers/getAlbums.js');
+var deleteAlbum = require('../controllers/deleteAlbum.js');
 var uploadPhoto = require('../controllers/uploadPhoto.js');
-var getPhoto = require('../controllers/getPhoto.js');
+var upload = require('../controllers/upload.js');
+var getPhotos = require('../controllers/getPhotos.js');
+var deletePhoto = require('../controllers/deletePhoto.js');
 
 router.get('/initDB', initDB);
 router.post('/login', login); //登录
@@ -36,7 +39,7 @@ router.get('/avatar', getAvatar); //获取头像
 router.post('/postArticle', postArticle); //发表文章
 router.get('/getArticle', getArticle); //获取文章
 router.post('/updateArticle', updateArticle); //更新文章
-router.get('/deleteArticle', deleteArticle);
+router.delete('/article', deleteArticle);
 router.get('/getDraft', getDraft);
 router.post('/saveDraft', saveDraft);
 router.get('/getArticleContent', getArticleContent)
@@ -44,8 +47,11 @@ router.get('/getArticleContent', getArticleContent)
 //图片上传
 router.post('/createAlbum', createAlbum);
 router.get('/getAlbums', getAlbums);
+router.delete('/album', deleteAlbum);
 router.post('/updateAlbum', updateAlbum);
 router.post('/uploadPhoto', uploadPhoto);
-router.post('/getPhoto', getPhoto);
+router.post('/upload', upload);
+router.get('/photos', getPhotos);
+router.delete('/photo', deletePhoto);
 
 module.exports = router;

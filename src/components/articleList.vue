@@ -3,7 +3,7 @@
         <ut-row class='contents'>
             <ut-col :span='4'></ut-col>
             <ut-col :span='16' style='overflow:auto;'>
-                <ut-card v-for='item in articles'>
+                <ut-card v-for='(item,index) in articles'>
                     <div slot="header" class='clearFix'>
                         <router-link to='#' class='headPic'>
                             <img :src='item.logoUrl' alt="" class='avatar'>
@@ -18,7 +18,7 @@
                                 <ut-dropdown-item>
                                     <router-link :to='"/article/edit/"+item.id'>编辑</router-link>
                                 </ut-dropdown-item>
-                                <ut-dropdown-item>删除</ut-dropdown-item>
+                                <ut-dropdown-item @click.native='deleteArticle(index)'>删除</ut-dropdown-item>
                             </template>
                         </ut-dropdown>
                     </div>
@@ -38,81 +38,112 @@
                 <md-icon>edit</md-icon>
             </md-button>
         </router-link>
+        <md-dialog-confirm md-title="删除文章" md-content-html="删除后不可恢复，确定删除？" md-ok-text="仍要删除" md-cancel-text="取消" @close="onClose" ref="dialog2">
+        </md-dialog-confirm>
     </div>
 </template>
-<script lang="">
+
+<script>
 const jwt = require('koa-jwt');
 const moment = require('moment');
 export default {
-    data(){
-        return{
-            articles:[],
+    data() {
+        return {
+            articles: [],
+            currentArticle: -1
         }
     },
-    props:['userName'],
-    methods:{
-        getArticles(userName){
-            if(userName){
-                this.$http.get('/api/getArticle',{params:{userName}}).then((res)=>{
-                this.articles = res.data;
-                this.articles.forEach((item,id)=>{
-                    this.getAvatar(item.userName,id);
-                    this.$set(this.articles[id],'time',moment(item.time,'YYYY-MM-DD HH:mm:ss').fromNow())
-                });
-                this.articles.sort((a,b)=>{
-                    if(moment(a.time,'YYYY-MM-DD HH:mm:ss').isAfter(b.time)){
-                        return -1;
+    props: ['userName'],
+    methods: {
+        openDialog(ref) {
+            this.$refs[ref].open();
+        },
+        closeDialog(ref) {
+            this.$refs[ref].close();
+        },
+        onClose(type) {
+            if ('ok' == type) {
+                let article = this.articles[this.currentArticle];
+                let id = article.id;
+                this.$http.delete('/api/article', { params: { id } }).then((res) => {
+                    if (res.data) {
+                        this.articles.splice(this.currentArticle, 1);
+                        this.$message.success('删除成功');
                     }
-                    else{
-                        return 1;
-                    } 
-                });                   
-                },(err)=>{
+                    else {
+                        this.$message.error('删除失败');
+                    }
+                }, () => {
+                    this.$message.error('服务器错误');
+                });
+            }
+        },
+        deleteArticle(index) {
+            this.currentArticle = index;
+            this.openDialog('dialog2');
+        },
+        getArticles(userName) {
+            if (userName) {
+                this.$http.get('/api/getArticle', { params: { userName } }).then((res) => {
+                    this.articles = res.data;
+                    this.articles.forEach((item, id) => {
+                        this.getAvatar(item.userName, id);
+                        this.$set(this.articles[id], 'time', moment(item.time, 'YYYY-MM-DD HH:mm:ss').fromNow())
+                    });
+                    this.articles.sort((a, b) => {
+                        if (moment(a.time, 'YYYY-MM-DD HH:mm:ss').isAfter(b.time)) {
+                            return -1;
+                        }
+                        else {
+                            return 1;
+                        }
+                    });
+                }, (err) => {
                     this.$message.error('获取文章列表失败');
                 });
             }
-            else{
-                this.$http.get('/api/getArticle').then((res)=>{
-                this.articles = res.data; 
-                this.articles.forEach((item,id)=>{
-                    this.getAvatar(item.userName,id);
-                    this.$set(this.articles[id],'time',moment(item.time,'YYYY-MM-DD HH:mm:ss').fromNow())
-                }); 
-                this.articles.sort((a,b)=>{
-                    if(moment(a.time,'YYYY-MM-DD HH:mm:ss').isAfter(b.time)){
-                        return -1;
-                    }
-                    else{
-                        return 1;
-                    } 
-                });                 
-                },(err)=>{
+            else {
+                this.$http.get('/api/getArticle').then((res) => {
+                    this.articles = res.data;
+                    this.articles.forEach((item, id) => {
+                        this.getAvatar(item.userName, id);
+                        this.$set(this.articles[id], 'time', moment(item.time, 'YYYY-MM-DD HH:mm:ss').fromNow())
+                    });
+                    this.articles.sort((a, b) => {
+                        if (moment(a.time, 'YYYY-MM-DD HH:mm:ss').isAfter(b.time)) {
+                            return -1;
+                        }
+                        else {
+                            return 1;
+                        }
+                    });
+                }, (err) => {
                     this.$message.error('获取文章列表失败');
                 });
             }
         },
-        getAvatar(userName,id){
-            this.$http.get('/api/avatar', { params:{userName} }).then((res) => {
-                    if (res.data.state) {
-                        this.$set(this.articles[id],'logoUrl',res.data.url);
-                    }
-                });
+        getAvatar(userName, id) {
+            this.$http.get('/api/avatar', { params: { userName } }).then((res) => {
+                if (res.data.state) {
+                    this.$set(this.articles[id], 'logoUrl', res.data.url);
+                }
+            });
         }
     },
-    created(){
-        if(this.$route.params.userName){
+    created() {
+        if (this.$route.params.userName) {
             this.getArticles(this.userName);
         }
-        else{
+        else {
             this.getArticles();
         }
     },
     watch: {
-        '$route' (to, from) {
-            if(to.path=='/'&&from.path=='/articles/'+this.userName){
+        '$route'(to, from) {
+            if (to.path == '/' && from.path == '/articles/' + this.userName) {
                 this.getArticles();
             }
-            else if(to.path=='/articles/'+this.userName&&from.path=='/'){
+            else if (to.path == '/articles/' + this.userName && from.path == '/') {
                 this.getArticles(this.userName);
             }
         }
