@@ -9,6 +9,8 @@ var checkName = require('../controllers/checkName.js');
 var register = require('../controllers/register.js');
 var resetPwd = require('../controllers/resetPwd.js');
 var getAvatar = require('../controllers/getAvatar.js');
+var getUserInfo = require('../controllers/getUserInfo.js');
+var updateUserInfo = require('../controllers/updateUserInfo.js');
 
 
 var postArticle = require('../controllers/postArticle.js');
@@ -34,6 +36,8 @@ router.post('/checkName', checkName); //检测注册姓名时的合法性
 router.post('/register', register); //注册
 router.post('/resetPwd', resetPwd); //重置密码
 router.get('/avatar', getAvatar); //获取头像
+router.get('/userInfo', getUserInfo);
+router.get('/updateUserInfo', updateUserInfo);
 
 //文章系列
 router.post('/postArticle', postArticle); //发表文章

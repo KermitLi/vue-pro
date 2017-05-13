@@ -86,10 +86,6 @@ export default {
             if (userName) {
                 this.$http.get('/api/getArticle', { params: { userName } }).then((res) => {
                     this.articles = res.data;
-                    this.articles.forEach((item, id) => {
-                        this.getAvatar(item.userName, id);
-                        this.$set(this.articles[id], 'time', moment(item.time, 'YYYY-MM-DD HH:mm:ss').fromNow())
-                    });
                     this.articles.sort((a, b) => {
                         if (moment(a.time, 'YYYY-MM-DD HH:mm:ss').isAfter(b.time)) {
                             return -1;
@@ -97,6 +93,10 @@ export default {
                         else {
                             return 1;
                         }
+                    });
+                    this.articles.forEach((item, id) => {
+                        this.getAvatar(item.userName, id);
+                        this.$set(this.articles[id], 'time', moment(item.time, 'YYYY-MM-DD HH:mm:ss').fromNow())
                     });
                 }, (err) => {
                     this.$message.error('获取文章列表失败');
@@ -105,10 +105,6 @@ export default {
             else {
                 this.$http.get('/api/getArticle').then((res) => {
                     this.articles = res.data;
-                    this.articles.forEach((item, id) => {
-                        this.getAvatar(item.userName, id);
-                        this.$set(this.articles[id], 'time', moment(item.time, 'YYYY-MM-DD HH:mm:ss').fromNow())
-                    });
                     this.articles.sort((a, b) => {
                         if (moment(a.time, 'YYYY-MM-DD HH:mm:ss').isAfter(b.time)) {
                             return -1;
@@ -116,6 +112,10 @@ export default {
                         else {
                             return 1;
                         }
+                    });
+                    this.articles.forEach((item, id) => {
+                        this.getAvatar(item.userName, id);
+                        this.$set(this.articles[id], 'time', moment(item.time, 'YYYY-MM-DD HH:mm:ss').fromNow())
                     });
                 }, (err) => {
                     this.$message.error('获取文章列表失败');

@@ -31,29 +31,29 @@ export default {
             userEmail: '',
             userPwd: '',
             userConfirmPwd: '',
-            logoUrl: '/static/img/logo.3456857.jpg',
+            logoUrl: '/photos/logo.jpg',
             userNameUnique: true
         }
     },
     methods: {
         validate() {
-            if (0 === this.userName.length) {
+            if (0 === this.userName.trim().length) {
                 this.$message.error('用户名不能为空');
                 return false;
             }
-            else if (0 === this.userEmail.length) {
+            else if (0 === this.userEmail.trim().length) {
                 this.$message.error('电子邮箱不能为空');
                 return false;
             }
-            else if (!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(this.userEmail)) {
+            else if (!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(this.userEmail.trim())) {
                 this.$message.error('非法的电子邮箱');
                 return false;
             }
-            else if (0 === this.userPwd.length) {
+            else if (0 === this.userPwd.trim().length) {
                 this.$message.error('密码不能为空');
                 return false;
             }
-            else if (0 === this.userConfirmPwd.length) {
+            else if (0 === this.userConfirmPwd.trim().length) {
                 this.$message.error('请确认密码');
                 return false;
             }
@@ -66,10 +66,11 @@ export default {
             }
         },
         register() {
+            this.check();
             if (this.validate() && this.userNameUnique) {
                 let userInfo = {
                     name: this.userName.toLowerCase(),
-                    email: md5(this.userEmail.toLowerCase()),
+                    email: this.userEmail.toLowerCase(),
                     pwd: md5(this.userPwd),
                     logoUrl: this.logoUrl
                 }

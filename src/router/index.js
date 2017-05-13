@@ -4,9 +4,10 @@ import Router from 'vue-router'
 
 import home from '../views/home';
 
-import login from '../views/login'
-import register from '../views/register'
-import forgetPwd from '../views/forgetPwd'
+import login from '../views/login';
+import register from '../views/register';
+import forgetPwd from '../views/forgetPwd';
+import myProfile from '../views/myProfile';
 
 import albums from '../views/albums.vue';
 import photos from '../views/photos.vue';
@@ -61,6 +62,11 @@ var router = new Router({
       path: '/albums',
       name: "albums",
       component: albums
+    },
+    {
+      path: '/myProfile',
+      name: 'myProfile',
+      component: myProfile
     }
   ]
 });

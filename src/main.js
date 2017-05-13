@@ -15,7 +15,6 @@ Vue.use(utear);
 Vue.use(vueMaterial);
 Vue.use(vueSimplemde);
 
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

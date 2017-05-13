@@ -8,8 +8,11 @@
         <md-sidenav class="md-left" ref="leftSidenav">
             <md-toolbar class="md-large" md-primary>
                 <md-avatar class="md-avatar-icon md-large">
-                    <img :src='logoUrl' alt="">
+                    <router-link to='/myProfile'>
+                        <img :src='logoUrl' alt="">
+                    </router-link>
                 </md-avatar>
+                <span class="md-subhead">{{signature}}</span>
             </md-toolbar>
     
             <md-list>
@@ -51,7 +54,8 @@ export default {
     name: 'header',
     data() {
         return {
-            logoUrl: '/photos/logo.jpg'
+            logoUrl: '/photos/logo.jpg',
+            signature: '您还没有个性签名'
         }
     },
     props: ['userName'],
@@ -59,11 +63,12 @@ export default {
         toggleLeftSidenav() {
             this.$refs.leftSidenav.toggle();
         },
-        getAvatar() {
-            let userName = this.userName;
-            this.$http.get('/api/avatar', { params: { userName } }).then((res) => {
-                if (res.data.state) {
-                    this.logoUrl = res.data.url;
+        getUserInfo() {
+            let name = this.userName;
+            this.$http.get('/api/userInfo', { params: { name } }).then((res) => {
+                if (res.data) {
+                    this.logoUrl = res.data.avatar_url;
+                    this.signature = res.data.signature;
                 }
             });
         },
@@ -71,6 +76,9 @@ export default {
             sessionStorage.setItem('token', null);
             this.$router.push({ path: '/login' });
         }
+    },
+    created() {
+        this.getUserInfo();
     }
 }
 </script>
@@ -79,14 +87,18 @@ export default {
 .navMenu {
     background-color: #20a0ff;
     width: 100%;
-    height: 10%;
+    height: 8%;
 
     .md-avatar.md-large.md-large {
-        width: 80px;
-        min-width: 80px;
-        height: 80px;
-        min-height: 80px;
-        border-radius: 80px;
+        width: 2.3rem;
+        height: 2.3rem;
+        border-radius: 100%;
+    }
+
+    .md-subhead {
+        width: 100%;
+        display: block;
+        text-align: center;
     }
 
     .md-list-item:hover {
