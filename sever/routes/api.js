@@ -30,6 +30,8 @@ var upload = require('../controllers/upload.js');
 var getPhotos = require('../controllers/getPhotos.js');
 var deletePhoto = require('../controllers/deletePhoto.js');
 
+var pachong = require('../controllers/pachong.js');
+
 router.get('/initDB', initDB);
 router.post('/login', login); //登录
 router.post('/checkName', checkName); //检测注册姓名时的合法性
@@ -57,5 +59,8 @@ router.post('/uploadPhoto', uploadPhoto);
 router.post('/upload', upload);
 router.get('/photos', getPhotos);
 router.delete('/photo', deletePhoto);
+
+router.get("/news", pachong);
+
 
 module.exports = router;

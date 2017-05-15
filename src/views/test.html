@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+  <script>
+    var gitment = new Gitment({
+      owner: 'KermitLi',
+      repo: 'blog-comment',
+      oauth: {
+        client_id: 'a4fa6cbe390a1ba5c316',
+        client_secret: 'b3f33fa56d235fdcd8a969e57eadf1a390ba8204',
+      },
+    });
+    gitment.render('container')
+
+  </script>
+</body>
+
+</html>

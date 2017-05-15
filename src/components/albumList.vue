@@ -237,8 +237,9 @@ export default {
 </script>
 <style lang="less" scoped>
 .albums {
-  height: 93.3%;
+  height: 92%;
   border: 1px solid;
+  overflow: auto;
 
   .md-card {
     width: 30%;

@@ -17,7 +17,7 @@ app.use(staticPath(path.join(__dirname, '/public')));
 app.use(jwt({
   secret: 'Kermit'
 }).unless({
-  path: ['/api/checkName', '/api/register', '/api/login', '/api/initDB', '/api/getArticle', '/api/updateArticle', '/api/deleteArticle', '/api/uploadPhoto', '/api/avatar', '/api/getDraft', '/api/saveDraft']
+  path: ['/api/checkName', '/api/register', '/api/login', '/api/initDB', '/api/getArticle', '/api/updateArticle', '/api/deleteArticle', '/api/uploadPhoto', '/api/avatar', '/api/getDraft', '/api/saveDraft', '/api/news']
 }));
 
 app.use(function* (next) {

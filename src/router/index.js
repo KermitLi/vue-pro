@@ -12,7 +12,10 @@ import myProfile from '../views/myProfile';
 import albums from '../views/albums.vue';
 import photos from '../views/photos.vue';
 
+import article from '../views/article.vue';
 import post from '../views/post';
+
+import news from '../views/news.vue';
 
 Vue.use(Router);
 Vue.use(vueResouce);
@@ -54,6 +57,11 @@ var router = new Router({
       component: post
     },
     {
+      path: '/article/:id',
+      name: 'articleDetails',
+      component: article
+    },
+    {
       path: '/albums/:albumId',
       name: 'photos',
       component: photos
@@ -67,6 +75,11 @@ var router = new Router({
       path: '/myProfile',
       name: 'myProfile',
       component: myProfile
+    },
+    {
+      path: '/news',
+      name: 'news',
+      component: news
     }
   ]
 });

@@ -8,7 +8,7 @@ module.exports = function* () {
     }
   });
 
-  if (result) {
+  if (album.name != result.name && result) {
     this.body = {
       state: false,
       error_code: 0

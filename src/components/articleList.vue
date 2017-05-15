@@ -1,11 +1,12 @@
 <template>
     <div class="articleList">
-        <ut-row class='contents'>
-            <ut-col :span='4'></ut-col>
-            <ut-col :span='16' style='overflow:auto;'>
+        <md-layout md-gutter class="contents">
+            <md-layout md-hide-xsmall md-hide-small md-flex-medium="10" md-flex-large="15" md-flex-xlarge="20">
+            </md-layout>
+            <md-layout md-flex-xsmall="100" md-flex-small="100" md-flex-medium="80" md-flex-large="70" md-flex-xlarge="60" class="contents">
                 <ut-card v-for='(item,index) in articles'>
                     <div slot="header" class='clearFix'>
-                        <router-link to='#' class='headPic'>
+                        <router-link :to='"/articles/"+item.userName' class='headPic'>
                             <img :src='item.logoUrl' alt="" class='avatar'>
                         </router-link>
                         <div class="articleInfo">
@@ -23,16 +24,16 @@
                         </ut-dropdown>
                     </div>
                     <div>
-                        <router-link to='#' class="article-title">{{item.title}}</router-link>
-                        <article class="article-content">
-                            {{item.contents}}
+                        <router-link :to='"/article/"+item.id' class="article-title">{{item.title}}</router-link>
+                        <article class="article-content" v-html="marked(item.contents)">
                         </article>
                     </div>
-                    <router-link to='#' class='readMore'>查看更多</router-link>
+                    <router-link :to='"/article/"+item.id' class='readMore'>查看更多</router-link>
                 </ut-card>
-            </ut-col>
-            <ut-col :span='4'></ut-col>
-        </ut-row>
+            </md-layout>
+            <md-layout md-hide-xsmall md-hide-small md-flex-medium="10" md-flex-large="15" md-flex-xlarge="20">
+            </md-layout>
+        </md-layout>
         <router-link to='/article/post'>
             <md-button class="md-fab add">
                 <md-icon>edit</md-icon>
@@ -46,6 +47,15 @@
 <script>
 const jwt = require('koa-jwt');
 const moment = require('moment');
+moment.lang('zh-cn');
+const marked = require('marked');
+const hljs = require('highlight.js');
+import 'highlight.js/styles/atom-one-light.css';
+marked.setOptions({
+    highlight: function (code, lang) {
+        return "<code class='hljs'>" + hljs.highlightAuto(code).value + "</code>";
+    }
+});
 export default {
     data() {
         return {
@@ -55,6 +65,7 @@ export default {
     },
     props: ['userName'],
     methods: {
+        marked, hljs,
         openDialog(ref) {
             this.$refs[ref].open();
         },
@@ -132,7 +143,7 @@ export default {
     },
     created() {
         if (this.$route.params.userName) {
-            this.getArticles(this.userName);
+            this.getArticles(this.$route.params.userName);
         }
         else {
             this.getArticles();
@@ -140,11 +151,16 @@ export default {
     },
     watch: {
         '$route'(to, from) {
-            if (to.path == '/' && from.path == '/articles/' + this.userName) {
+            if (to.path == '/' && from.path == '/articles/' + from.params.userName) {
                 this.getArticles();
             }
-            else if (to.path == '/articles/' + this.userName && from.path == '/') {
-                this.getArticles(this.userName);
+            else if (to.path == '/articles/' + to.params.userName && from.path == '/') {
+                console.log(to.params.userName);
+                this.getArticles(to.params.userName);
+            }
+            else if (to.path == '/articles/' + to.params.userName && from.path == '/articles/' + from.params.userName) {
+                console.log(to.params.userName);
+                this.getArticles(to.params.userName);
             }
         }
     }
@@ -153,8 +169,8 @@ export default {
 <style lang="less" scoped>
 .articleList {
     width: 100%;
-    height: 90%;
-    border: 1px solid #000;
+    height: 92%;
+    overflow: auto;
 
     a:hover {
         text-decoration: none!important;
@@ -163,10 +179,12 @@ export default {
     .contents {
         height: 100%;
 
-        .utear-col {
+        .md-layout {
             height: 100%;
 
             .utear-card {
+                width: 100%;
+                height: 31.4%;
                 margin-top: 1rem; // border:none;
                 .utear-card-header {
                     .headPic {
@@ -216,11 +234,11 @@ export default {
                     .article-content {
                         font-size: 0.6rem;
                         line-height: 1.4;
-                        word-break: break-all;
                         color: #424242;
                         height: 2.5rem;
                         margin-top: 0.4rem;
                         overflow: hidden;
+                        white-space: pre-wrap;
                     }
                 }
 

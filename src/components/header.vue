@@ -35,7 +35,7 @@
                     </router-link>
                 </md-list-item>
                 <md-list-item>
-                    <router-link to='#'>
+                    <router-link to='/news'>
                         <md-icon>fiber_new</md-icon>
                         <span>技术新闻</span>
                     </router-link>

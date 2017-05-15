@@ -56,9 +56,6 @@ export default {
             this.title = '';
             this.content = '';
         },
-        back() {
-            this.$router.go(-1);
-        },
         validate() {
             if (0 === this.title.length) {
                 this.$message.error('标题不能为空');

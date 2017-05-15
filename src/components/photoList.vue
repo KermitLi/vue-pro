@@ -65,146 +65,146 @@
 <script>
 import header from './header.vue';
 export default {
-    name: "photoList",
-    data () {
-      return {
-        urls:[],
-        photos:[],
-        album:{},
-        currentPic:0,
-        photoView:false
-      };
+  name: "photoList",
+  data() {
+    return {
+      urls: [],
+      photos: [],
+      album: {},
+      currentPic: 0,
+      photoView: false
+    };
+  },
+  props: ['userName', 'albumId'],
+  computed: {
+    uploadDisabled() {
+      return this.urls.length === 0;
+    }
+  },
+  created() {
+    this.getPhotos();
+    this.getAlbumInfo();
+  },
+  methods: {
+    back() {
+      this.$router.go(-1);
     },
-    props:['userName','albumId'],
-    computed:{
-      uploadDisabled(){
-        return this.urls.length===0;
-      }
-    },
-    created(){
-      this.getPhotos();
-      this.getAlbumInfo();
-    },
-    methods:{
-    back(){
-          this.$router.go(-1);
-    },
-    view(index){
+    view(index) {
       this.currentPic = index;
       this.photoView = true;
     },
-    pre(){
-      if(this.currentPic>0){
+    pre() {
+      if (this.currentPic > 0) {
         this.currentPic--;
       }
     },
-    next(){
-      if(this.currentPic<this.photos.length-1){
+    next() {
+      if (this.currentPic < this.photos.length - 1) {
         this.currentPic++;
       }
     },
     openDialog(ref) {
-    this.$refs[ref].open();
+      this.$refs[ref].open();
     },
     closeDialog(ref) {
       this.$refs[ref].close();
     },
-    onOpen(){
-      this.urls=[];
+    onOpen() {
+      this.urls = [];
     },
-    onClose(type){
-      if('ok'==type){
+    onClose(type) {
+      if ('ok' == type) {
         let photo = this.photos[this.currentPic];
         let album = photo.album;
         let url = photo.url;
         let userName = this.userName;
-        this.$http.delete('/api/photo',{params:{url,userName,album}}).then((res)=>{
-          if(res.data){
-            this.photos.splice(this.currentPic,1);
+        this.$http.delete('/api/photo', { params: { url, userName, album } }).then((res) => {
+          if (res.data) {
+            this.photos.splice(this.currentPic, 1);
             this.$message.success('删除成功');
           }
-          else{
+          else {
             this.$message.error('删除失败');
           }
-        },()=>{
+        }, () => {
           this.$message.error('服务器错误');
         });
       }
     },
-    onSuccess(res,file,fileList){
+    onSuccess(res, file, fileList) {
       this.urls.push(res.url);
     },
     toggleAction(index) {
       this.photos[index].action = !this.photos[index].action;
     },
-    deletePhoto(index){
+    deletePhoto(index) {
       this.openDialog('dialog2');
       this.currentPic = index;
     },
-    upload(){
-        let successCount=0
-        let failedCount = 0;
-        let album = this.albumId;
-        if(album){
-            this.urls.forEach((item,index)=>{
-              let url = item;
-              let userName = this.userName;
-              let photo = {url,album,userName};
-              this.$http.post('/api/upload',photo).then((res)=>{
-                if(res.data.state){
-                  successCount++;
-                  this.photos.push(res.data.result);
-                   this.$set(this.photos[this.photos.length-1], 'action', false);
-                }
-                else{
-                  failedCount++;
-                }
-                if(index===this.urls.length-1){
-                  this.$message(`上传完成，成功${successCount}个，失败${failedCount}个。`);
-                }
-              },()=>{
-                this.$message.error('服务器错误');
-                failedCount++;
-                if(index===this.urls.length-1){
-                  this.$message(`上传完成，成功${successCount}个，失败${failedCount}个。`);
-                }
-              });
-            });
-        }
-        else{
-          this.$message.error('进入相册失败，请返回重新进入');
-        }
-        this.closeDialog('dialog1');
-      },
-      getPhotos(){
-        let userName = this.userName;
-        let album = this.albumId;
-        if(album){
-          this.$http.get('/api/photos',{params:{userName,album}}).then((res)=>{
-            this.photos = res.data;
-            this.photos.forEach((item, index) => {
-              this.$set(this.photos[index], 'action', false);
-            });
-          },()=>{
+    upload() {
+      let successCount = 0
+      let failedCount = 0;
+      let album = this.albumId;
+      if (album) {
+        this.urls.forEach((item, index) => {
+          let url = item;
+          let userName = this.userName;
+          let photo = { url, album, userName };
+          this.$http.post('/api/upload', photo).then((res) => {
+            if (res.data.state) {
+              successCount++;
+              this.photos.push(res.data.result);
+              this.$set(this.photos[this.photos.length - 1], 'action', false);
+            }
+            else {
+              failedCount++;
+            }
+            if (index === this.urls.length - 1) {
+              this.$message(`上传完成，成功${successCount}个，失败${failedCount}个。`);
+            }
+          }, () => {
             this.$message.error('服务器错误');
+            failedCount++;
+            if (index === this.urls.length - 1) {
+              this.$message(`上传完成，成功${successCount}个，失败${failedCount}个。`);
+            }
           });
-        }
-      },
-      getAlbumInfo(){
-        let userName = this.userName;
-        let id = this.albumId;
-        this.$http.get('/api/getAlbums',{params:{userName,id}}).then((res)=>{
-          this.album = res.data[0];
-        },()=>{
-          this.$message.error('获取相册信息失败');
         });
       }
+      else {
+        this.$message.error('进入相册失败，请返回重新进入');
+      }
+      this.closeDialog('dialog1');
+    },
+    getPhotos() {
+      let userName = this.userName;
+      let album = this.albumId;
+      if (album) {
+        this.$http.get('/api/photos', { params: { userName, album } }).then((res) => {
+          this.photos = res.data;
+          this.photos.forEach((item, index) => {
+            this.$set(this.photos[index], 'action', false);
+          });
+        }, () => {
+          this.$message.error('服务器错误');
+        });
+      }
+    },
+    getAlbumInfo() {
+      let userName = this.userName;
+      let id = this.albumId;
+      this.$http.get('/api/getAlbums', { params: { userName, id } }).then((res) => {
+        this.album = res.data[0];
+      }, () => {
+        this.$message.error('获取相册信息失败');
+      });
     }
   }
+}
 </script>
 <style lang="less" scoped>
 .photos {
-  height: 93.3%;
+  height: 92%;
   border: 1px solid;
   overflow: auto;
 
