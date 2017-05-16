@@ -2,7 +2,9 @@
   <div class="forgetPwd">
     <ut-layout class="layout">
       <ut-row>
-        <ut-col :span="2" :offset="11"><img class='logo' :src='logoUrl' alt=""></ut-col>
+        <ut-col :span="2" :offset="11">
+          <img class='logo' :src='logoUrl' alt="">
+        </ut-col>
       </ut-row>
       <ut-row>
         <ut-col :span="6" :offset="9" class='clearFix'>
@@ -27,7 +29,7 @@ export default {
   name: "forgetPwd",
   data() {
     return {
-      logoUrl: '/static/img/logo.3456857.jpg',
+      logoUrl: '/photos/logo.jpg',
       userName: '',
       userEmail: '',
       userPwd: '',
