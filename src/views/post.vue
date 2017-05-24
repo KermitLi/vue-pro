@@ -1,5 +1,5 @@
 <template>
-    <div class="post">
+    <div class="post" utear-loading-style='bars' v-loading='loading'>
         <ut-row>
             <ut-col :span='4'>
                 <md-button class="md-icon-button" md-size='large' @click.native='back'>
@@ -43,7 +43,8 @@ export default {
                     highlightingTheme: 'atom-one-light' // 自定义代码高亮主题，可选列表(https://github.com/isagalaev/highlight.js/tree/master/src/styles)
                 }
             },
-            type: 'post'
+            type: 'post',
+            loading: false
         }
     },
     computed: {
@@ -82,9 +83,10 @@ export default {
                 else {
                     this.$router.push({ path: '/login' });
                 }
-
+                this.loading = true;
                 let article = { title, contents, userName, time };
                 this.$http.post('/api/postArticle', article).then((res) => {
+                    this.laoding = false;
                     if (res.data) {
                         this.$message.success('发表成功');
                         this.clear();
@@ -93,6 +95,7 @@ export default {
                         this.$message.error('发表失败');
                     }
                 }, () => {
+                    this.loading = false;
                     this.$message.error('服务器错误');
                 });
             }
@@ -101,7 +104,9 @@ export default {
             let token = sessionStorage.getItem('token');
             var userName = jwt.verify(token, 'Kermit').name;
             if (token !== null && token !== 'null') {
+                this.loading = true;
                 this.$http.get('/api/getArticleContent', { params: { id } }).then((res) => {
+                    this.loading = false;
                     if (res.data) {
                         this.title = res.data.title;
                         this.content = res.data.contents;
@@ -110,6 +115,7 @@ export default {
                         this.$message.error('获取文章内容失败');
                     }
                 }, () => {
+                    this.loading = false;
                     this.$message.error('服务器错误');
                 });
             }
@@ -119,19 +125,20 @@ export default {
         },
         updateArticle() {
             if (this.validate()) {
-                let title = this.title;
-                let contents = this.content;
-                let id = this.$route.params.id;
-                let token = sessionStorage.getItem('token');
                 if (token !== null && token !== 'null') {
                     var userName = jwt.verify(token, 'Kermit').name;
                 }
                 else {
                     this.$router.push({ path: '/login' });
                 }
-
+                this.loading = true;
+                let title = this.title;
+                let contents = this.content;
+                let id = this.$route.params.id;
+                let token = sessionStorage.getItem('token');
                 let article = { title, contents, userName, id };
                 this.$http.post('/api/updateArticle', article, ).then((res) => {
+                    this.loading = false;
                     if (res.data) {
                         this.$message.success('更改成功');
                         this.$router.go(-1);
@@ -140,14 +147,13 @@ export default {
                         this.$message.error('更改失败');
                     }
                 }, () => {
+                    this.loading = false;
                     this.$message.error('服务器错误');
                 });
             }
         },
         saveDraft() {
             if (this.validate()) {
-                let title = this.title;
-                let contents = this.content;
                 let token = sessionStorage.getItem('token');
                 if (token !== null && token !== 'null') {
                     var userName = jwt.verify(token, 'Kermit').name;
@@ -155,9 +161,12 @@ export default {
                 else {
                     this.$router.push({ path: '/login' });
                 }
-
+                this.loading = true;
+                let title = this.title;
+                let contents = this.content;
                 let draft = { title, contents, userName };
                 this.$http.post('/api/saveDraft', draft).then((res) => {
+                    this.loading = false;
                     if (res.data) {
                         this.$message.success('保存成功');
                     }
@@ -165,6 +174,7 @@ export default {
                         this.$message.error('保存失败');
                     }
                 }, () => {
+                    this.loading = false;
                     this.$message.error('服务器错误');
                 });
 
@@ -174,12 +184,15 @@ export default {
             let token = sessionStorage.getItem('token');
             var userName = jwt.verify(token, 'Kermit').name;
             if (token !== null && token !== 'null') {
+                this.loading = true;
                 this.$http.get('/api/getDraft', { params: { userName } }).then((res) => {
+                    this.loading = false;
                     if (res.data) {
                         this.title = res.data.title;
                         this.content = res.data.contents;
                     }
                 }, () => {
+                    this.laoding = false;
                     this.$message.error('获取草稿失败');
                 });
             }

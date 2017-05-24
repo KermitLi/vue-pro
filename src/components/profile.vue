@@ -1,5 +1,5 @@
 <template>
-  <div class="profile">
+  <div class="profile" utear-loading-style='bars' v-loading='loading'>
     <md-layout md-gutter>
       <md-layout md-hide-xsmall md-flex-small='20' md-flex-medium="25" md-flex-large="30" md-flex-xlarge="25">
         <md-button class="md-icon-button" md-size='large' @click.native='back'>
@@ -45,7 +45,8 @@ export default {
       signature: '',
       newAvatar_url: '/photos/logo.jpg',
       newEmail: '',
-      newSignature: ''
+      newSignature: '',
+      loading: false
     };
   },
   props: ['userName'],
@@ -62,8 +63,10 @@ export default {
       this.$router.go(-1);
     },
     getUserInfo() {
+      this.loading = true;
       let name = this.userName;
       this.$http.get('/api/userInfo', { params: { name } }).then((res) => {
+        this.loading = false;
         let user = res.data;
         if (user) {
           this.newEmail = this.email = user.email;
@@ -71,6 +74,7 @@ export default {
           this.newSignature = this.signature = user.signature;
         }
       }, () => {
+        this.loading = false;
         this.$message.error('服务器错误，获取用户信息失败');
       });
     },
@@ -96,17 +100,20 @@ export default {
         this.$message.success('保存成功')
       }
       if (this.validate()) {
+        this.loading = true;
         let name = this.userName;
         let avatar_url = this.newAvatar_url;
         let email = this.newEmail;
         let signature = this.newSignature;
 
         this.$http.get('/api/updateUserInfo', { params: { name, avatar_url, email, signature } }).then((res) => {
+          this.loading = false;
           if (res.data) {
             this.$message.success('保存成功');
             this.editable = false;
           }
         }, () => {
+          this.loading = false;
           this.$message.error('服务器错误');
         });
       }

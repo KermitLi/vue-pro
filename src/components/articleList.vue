@@ -1,5 +1,5 @@
 <template>
-    <div class="articleList">
+    <div class="articleList" utear-loading-style='bars' v-loading='loading'>
         <md-layout md-gutter class="contents">
             <md-layout md-hide-xsmall md-hide-small md-flex-medium="10" md-flex-large="15" md-flex-xlarge="20">
             </md-layout>
@@ -60,7 +60,8 @@ export default {
     data() {
         return {
             articles: [],
-            currentArticle: -1
+            currentArticle: -1,
+            loading: false
         }
     },
     props: ['userName'],
@@ -74,9 +75,11 @@ export default {
         },
         onClose(type) {
             if ('ok' == type) {
+                this.loading = true;
                 let article = this.articles[this.currentArticle];
                 let id = article.id;
                 this.$http.delete('/api/article', { params: { id } }).then((res) => {
+                    this.loading = false;
                     if (res.data) {
                         this.articles.splice(this.currentArticle, 1);
                         this.$message.success('删除成功');
@@ -85,6 +88,7 @@ export default {
                         this.$message.error('删除失败');
                     }
                 }, () => {
+                    this.loading = false;
                     this.$message.error('服务器错误');
                 });
             }
@@ -95,6 +99,7 @@ export default {
         },
         getArticles(userName) {
             if (userName) {
+                this.loading = true;
                 this.$http.get('/api/getArticle', { params: { userName } }).then((res) => {
                     this.articles = res.data;
                     this.articles.sort((a, b) => {
@@ -109,11 +114,14 @@ export default {
                         this.getAvatar(item.userName, id);
                         this.$set(this.articles[id], 'time', moment(item.time, 'YYYY-MM-DD HH:mm:ss').fromNow())
                     });
+                    this.loading = false;
                 }, (err) => {
+                    this.loading = false;
                     this.$message.error('获取文章列表失败');
                 });
             }
             else {
+                this.loading = true;
                 this.$http.get('/api/getArticle').then((res) => {
                     this.articles = res.data;
                     this.articles.sort((a, b) => {
@@ -128,7 +136,9 @@ export default {
                         this.getAvatar(item.userName, id);
                         this.$set(this.articles[id], 'time', moment(item.time, 'YYYY-MM-DD HH:mm:ss').fromNow())
                     });
+                    this.loading = false;
                 }, (err) => {
+                    this.loading = false;
                     this.$message.error('获取文章列表失败');
                 });
             }

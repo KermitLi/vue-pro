@@ -1,5 +1,5 @@
 <template>
-  <div class="albums">
+  <div class="albums" utear-loading-style='bars' v-loading='loading'>
     <md-layout md-gutter>
       <md-layout md-hide-xsmall md-flex-small='10' md-flex-medium="20" md-flex-large="25" md-flex-xlarge="25">
         <md-button class="md-icon-button" md-size='large' @click.native='back'>
@@ -70,7 +70,8 @@ export default {
       currentAlbum: -1,
       albums: [],
       mode: 'create',
-      albumCover: '/photos/logo.jpg'
+      albumCover: '/photos/logo.jpg',
+      loading: false
     };
   },
   props: ['userName'],
@@ -98,15 +99,18 @@ export default {
     },
     onCloseDeleteDialog(type) {
       if ('ok' == type) {
+        this.loading = false;
         let album = this.albums[this.currentAlbum];
         let userName = album.userName;
         let name = album.name;
         let id = album.id;
+        this.loading = true;
         this.$http.delete('/api/album', { params: { userName, name } }).then((res) => {
           if (res.data) {
             this.$message.success('相册删除成功');
             this.albums.splice(this.currentAlbum, 1);
             this.$http.delete('/api/photo', { params: { userName, album: id } }).then((res) => {
+              this.loading = false;
               if (res.data) {
                 this.$message.success('照片删除成功');
               }
@@ -121,6 +125,7 @@ export default {
             this.$message.error('相册删除失败');
           }
         }, () => {
+          this.loading = false;
           this.$message.error('服务器错误，相册删除失败');
         });
       }
@@ -152,11 +157,13 @@ export default {
     },
     createAlbum(ref) {
       if (this.validate()) {
+        this.loading = true;
         let userName = this.userName;
         let name = this.newAlbumName;
         let desc = this.newAlbumDesc;
         let album = { userName, name, desc };
         this.$http.post('/api/createAlbum', album).then((res) => {
+          this.loading = false;
           if (res.data.state) {
             this.$message.success('创建成功');
             this.albums.push(res.data.result);
@@ -169,13 +176,16 @@ export default {
             this.$message.error('创建失败');
           }
         }, () => {
+          this.loading = false;
           this.$message.error('服务器错误');
         });
       }
     },
     getAlbums() {
+      this.loading = true;
       let userName = this.userName;
       this.$http.get('/api/getAlbums', { params: { userName } }).then((res) => {
+        this.loading = false;
         this.albums = res.data;
         this.albums.forEach((item, index) => {
           this.$set(this.albums[index], 'action', false);
@@ -183,6 +193,7 @@ export default {
           this.getAlbumcover(index);
         });
       }, () => {
+        this.loading = false;
         this.$message.error('服务器错误')
       });
     },
@@ -199,6 +210,7 @@ export default {
     },
     updateAlbum(ref) {
       if (this.validate()) {
+        this.loading = true;
         let userName = this.userName;
         let name = this.newAlbumName;
         let desc = this.newAlbumDesc;
@@ -206,6 +218,7 @@ export default {
         let oldDesc = this.oldAlbumDesc
         let album = { userName, name, desc, oldName, oldDesc };
         this.$http.post('/api/updateAlbum', album).then((res) => {
+          this.loading = false;
           if (res.data.state) {
             this.$message.success('更改成功');
             this.albums[this.currentAlbum].name = album.name;
@@ -219,6 +232,7 @@ export default {
             this.$message.error('更改失败');
           }
         }, () => {
+          this.loading = false;
           this.$message.error('服务器错误');
         });
       }

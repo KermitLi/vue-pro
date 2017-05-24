@@ -1,5 +1,5 @@
 <template>
-  <div class="article">
+  <div class="article" utear-loading-style='bars' v-loading='loading'>
     <md-layout md-gutter class="contents">
       <md-layout md-hide-xsmall md-flex-small='10' md-flex-medium="20" md-flex-large="25" md-flex-xlarge="25">
         <md-button class="md-icon-button" md-size='large' @click.native='back'>
@@ -36,13 +36,13 @@
 const jwt = require('koa-jwt');
 const moment = require('moment');
 moment.lang('zh-cn');
-const $  = require('jquery');
+const $ = require('jquery');
 const marked = require('marked');
 const hljs = require('highlight.js');
 import "highlight.js/styles/atom-one-light.css";
 var renderer = new marked.Renderer();
-renderer.code = function(code, lang) {
-  return "<code class='hljs'>"+hljs.highlightAuto(code).value+"</code>";
+renderer.code = function (code, lang) {
+  return "<code class='hljs'>" + hljs.highlightAuto(code).value + "</code>";
 };
 marked.setOptions({
   renderer: renderer,
@@ -57,43 +57,47 @@ import "gitment/style/default.css";
 
 export default {
   name: "article",
-  data () {
+  data() {
     return {
-      article:{
-        title:'',
-        content:'',
-        time:'',
-        userName:''
+      article: {
+        title: '',
+        content: '',
+        time: '',
+        userName: ''
       },
-      user:{
-        name:'',
-        avatar_url:'/photos/logo.jpg',
-        signature:'没有个性签名'
-      }
+      user: {
+        name: '',
+        avatar_url: '/photos/logo.jpg',
+        signature: '没有个性签名'
+      },
+      loading: false
     };
   },
-  methods:{
+  methods: {
     marked,
     back() {
-            this.$router.go(-1);
+      this.$router.go(-1);
     },
     getArticle(id) {
-            this.$http.get('/api/getArticleContent', { params: { id } }).then((res) => {
-                if (res.data) {
-                    this.article.title = res.data.title;
-                    this.article.content = this.marked(res.data.contents);
-                    this.article.time = moment(res.data.time,'YYYY-MM-DD HH:mm:ss').fromNow();
-                    this.user.name = this.article.userName = res.data.userName;
-                    this.getUserInfo(this.article.userName);
-                }
-                else {
-                    this.$message.error('获取文章内容失败');
-                }
-            }, () => {
-                this.$message.error('服务器错误');
-            });
+      this.loading = true;
+      this.$http.get('/api/getArticleContent', { params: { id } }).then((res) => {
+        this.loading = false;
+        if (res.data) {
+          this.article.title = res.data.title;
+          this.article.content = this.marked(res.data.contents);
+          this.article.time = moment(res.data.time, 'YYYY-MM-DD HH:mm:ss').fromNow();
+          this.user.name = this.article.userName = res.data.userName;
+          this.getUserInfo(this.article.userName);
+        }
+        else {
+          this.$message.error('获取文章内容失败');
+        }
+      }, () => {
+        this.loading = false;
+        this.$message.error('服务器错误');
+      });
     },
-    getUserInfo(userName){
+    getUserInfo(userName) {
       let name = userName;
       this.$http.get('/api/userInfo', { params: { name } }).then((res) => {
         let user = res.data;
@@ -101,24 +105,24 @@ export default {
           this.user.avatar_url = user.avatar_url;
           this.user.signature = user.signature;
         }
-        else{
+        else {
           this.$message.error('获取用户信息失败');
         }
       }, () => {
         this.$message.error('服务器错误，获取用户信息失败');
       });
-    }    
+    }
   },
-  created(){
+  created() {
     let token = sessionStorage.getItem('token');
-    if(token!==null&&token!=='null'){
+    if (token !== null && token !== 'null') {
       this.getArticle(this.$route.params.id);
     }
-    else{
-      this.$router.push({path:'/login'});
+    else {
+      this.$router.push({ path: '/login' });
     }
   },
-  mounted(){
+  mounted() {
   }
 }
 </script>
@@ -158,8 +162,8 @@ export default {
     text-align: center;
 
     .md-avatar {
-      width: 3rem;
-      height: 3rem;
+      width: 2.5rem;
+      height: 2.5rem;
       display: inline-block;
     }
 

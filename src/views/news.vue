@@ -1,7 +1,7 @@
 <template>
     <div class="news">
         <navMenu :userName='userName'></navMenu>
-        <md-layout md-gutter class="contents">
+        <md-layout md-gutter class="contents" utear-loading-style='bars' v-loading='loading'>
             <md-layout md-hide-xsmall md-hide-small md-flex-medium="10" md-flex-large="15" md-flex-xlarge="20">
                 <md-button class="md-icon-button" md-size='large' @click.native='back'>
                     <md-icon>arrow_back</md-icon>
@@ -43,7 +43,8 @@ export default {
             articles: [],
             currentTag: null,
             page: 1,
-            userName: ''
+            userName: '',
+            loading: false
         }
     },
     methods: {
@@ -51,16 +52,19 @@ export default {
             this.$router.go(-1);
         },
         getArticles(tag) {
+            this.loading = true;
             if (tag != this.currentTag) {
                 this.page = 1;
             }
             this.currentTag = tag;
             this.$http.get('/api/news', { params: { tag } }).then((res) => {
+                this.loading = false;
                 this.articles = res.data;
                 this.articles.forEach((item, id) => {
                     this.$set(this.articles[id], 'createdAt', moment(item.createdAt, 'YYYY-MM-DD HH:mm:ss').add(8, "h").fromNow())
                 });
             }, (err) => {
+                this.loading = false;
                 this.$message.error('获取文章列表失败');
             });
         },

@@ -1,5 +1,5 @@
 <template>
-  <div class="photos">
+  <div class="photos" utear-loading-style='bars' v-loading='loading'>
     <md-layout md-gutter>
       <md-layout md-hide-xsmall md-flex-small='10' md-flex-medium="20" md-flex-large="25" md-flex-xlarge="25">
         <md-button class="md-icon-button" md-size='large' @click.native='back'>
@@ -72,7 +72,8 @@ export default {
       photos: [],
       album: {},
       currentPic: 0,
-      photoView: false
+      photoView: false,
+      loading: false
     };
   },
   props: ['userName', 'albumId'],
@@ -114,11 +115,13 @@ export default {
     },
     onClose(type) {
       if ('ok' == type) {
+        this.loading = true;
         let photo = this.photos[this.currentPic];
         let album = photo.album;
         let url = photo.url;
         let userName = this.userName;
         this.$http.delete('/api/photo', { params: { url, userName, album } }).then((res) => {
+          this.loading = false;
           if (res.data) {
             this.photos.splice(this.currentPic, 1);
             this.$message.success('删除成功');
@@ -127,6 +130,7 @@ export default {
             this.$message.error('删除失败');
           }
         }, () => {
+          this.loading = false;
           this.$message.error('服务器错误');
         });
       }
@@ -150,6 +154,7 @@ export default {
           let url = item;
           let userName = this.userName;
           let photo = { url, album, userName };
+          this.loading = true;
           this.$http.post('/api/upload', photo).then((res) => {
             if (res.data.state) {
               successCount++;
@@ -160,9 +165,11 @@ export default {
               failedCount++;
             }
             if (index === this.urls.length - 1) {
+              this.loading = false;
               this.$message(`上传完成，成功${successCount}个，失败${failedCount}个。`);
             }
           }, () => {
+            this.loading = false;
             this.$message.error('服务器错误');
             failedCount++;
             if (index === this.urls.length - 1) {
@@ -177,15 +184,18 @@ export default {
       this.closeDialog('dialog1');
     },
     getPhotos() {
+      this.loading = true;
       let userName = this.userName;
       let album = this.albumId;
       if (album) {
         this.$http.get('/api/photos', { params: { userName, album } }).then((res) => {
+          this.loading = false;
           this.photos = res.data;
           this.photos.forEach((item, index) => {
             this.$set(this.photos[index], 'action', false);
           });
         }, () => {
+          this.loading = false;
           this.$message.error('服务器错误');
         });
       }

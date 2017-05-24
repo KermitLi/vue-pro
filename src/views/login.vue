@@ -1,5 +1,5 @@
 <template lang="html">
-    <div class="login">
+    <div class="login" utear-loading-style='bars' v-loading='loading'>
         <ut-layout class="layout">
             <ut-row>
                 <ut-col :span="2" :offset="11"><img class='logo' :src='logoUrl' alt=""></ut-col>
@@ -28,7 +28,8 @@ export default {
         return {
             userName: '',
             userPwd: '',
-            logoUrl: '/photos/logo.jpg'
+            logoUrl: '/photos/logo.jpg',
+            loading: false
         }
     },
     methods: {
@@ -47,11 +48,13 @@ export default {
         },
         login: function () {
             if (this.validate()) {
+                this.loading = true;
                 let userInfo = {
                     name: this.userName.toLowerCase(),
                     pwd: md5(this.userPwd)
                 }
                 this.$http.post('/api/login', userInfo).then(function (res) {
+                    this.loading = false;
                     if (0 === +res.data.state) {
                         sessionStorage.setItem('token', res.data.token);
                         this.$message.success('登录成功')
@@ -68,6 +71,7 @@ export default {
                         this.$message.error('用户名和密码不匹配')
                     }
                 }, function (err) {
+                    this.loading = false;
                     sessionStorage.setItem('token', null);
                     this.$message.error('服务器错误');
                 });

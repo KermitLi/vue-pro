@@ -1,5 +1,5 @@
 <template>
-  <div class="forgetPwd">
+  <div class="forgetPwd" utear-loading-style='bars' v-loading='loading'>
     <ut-layout class="layout">
       <ut-row>
         <ut-col :span="2" :offset="11">
@@ -34,7 +34,8 @@ export default {
       userEmail: '',
       userPwd: '',
       confirmPwd: '',
-      userNameUnique: false
+      userNameUnique: false,
+      loading: false
     };
   },
   methods: {
@@ -69,6 +70,7 @@ export default {
     },
     updatePwd() {
       if (this.validate() && this.userNameUnique) {
+        this.loading = true;
         let userEmail = md5(this.userEmailtoLowerCase());
         let userNewPwd = md5(this.userPwd);
         let userName = this.userName.toLowerCase();
@@ -82,7 +84,7 @@ export default {
           else {
             this.$message.error("用户名和电子邮箱不一致");
           }
-        }, (err) => this.$message.error('请求错误'));
+        }, (err) => { this.loading = false; this.$message.error('请求错误'); });
       }
     },
     check() {
