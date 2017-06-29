@@ -1,5 +1,5 @@
 var Ribes = require('ribes')
-var app = Ribes()
+var app = new Ribes()
 var start = Date.now()
 app.listen(app.config.port)
 
