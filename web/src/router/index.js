@@ -22,65 +22,65 @@ Vue.use(vueResouce);
 
 var router = new Router({
   routes: [{
-      path: '/',
-      name: 'home',
-      component: home
-    },
-    {
-      path: '/articles/:userName',
-      name: 'myArticles',
-      component: home
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: login
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: register
-    },
-    {
-      path: '/forgetPwd',
-      name: 'forgetPwd',
-      component: forgetPwd
-    },
-    {
-      path: '/article/post',
-      name: 'post',
-      component: post
-    },
-    {
-      path: '/article/edit/:id',
-      name: 'edit',
-      component: post
-    },
-    {
-      path: '/article/:id',
-      name: 'articleDetails',
-      component: article
-    },
-    {
-      path: '/albums/:albumId',
-      name: 'photos',
-      component: photos
-    },
-    {
-      path: '/albums',
-      name: "albums",
-      component: albums
-    },
-    {
-      path: '/myProfile',
-      name: 'myProfile',
-      component: myProfile
-    },
-    {
-      path: '/news',
-      name: 'news',
-      component: news
-    }
+    path: '/',
+    name: 'home',
+    component: home
+  },
+  {
+    path: '/articles/:userName',
+    name: 'myArticles',
+    component: home
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: login
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: register
+  },
+  {
+    path: '/forgetPwd',
+    name: 'forgetPwd',
+    component: forgetPwd
+  },
+  {
+    path: '/article/post',
+    name: 'post',
+    component: post
+  },
+  {
+    path: '/article/edit/:id',
+    name: 'edit',
+    component: post
+  },
+  {
+    path: '/article/:id',
+    name: 'articleDetails',
+    component: article
+  },
+  {
+    path: '/albums/:albumId',
+    name: 'photos',
+    component: photos
+  },
+  {
+    path: '/albums',
+    name: "albums",
+    component: albums
+  },
+  {
+    path: '/myProfile',
+    name: 'myProfile',
+    component: myProfile
+  },
+  {
+    path: '/news',
+    name: 'news',
+    component: news
+  }
   ]
 });
 router.beforeEach(function (to, from, next) {

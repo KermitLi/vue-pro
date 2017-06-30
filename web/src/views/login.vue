@@ -55,18 +55,18 @@ export default {
                 }
                 this.$http.post('/api/login', userInfo).then(function (res) {
                     this.loading = false;
-                    if (0 === +res.data.state) {
-                        sessionStorage.setItem('token', res.data.token);
+                    if (0 === +res.body.errorCode) {
+                        sessionStorage.setItem('token', res.body.data.token);
                         this.$message.success('登录成功')
                         setTimeout(() => {
                             this.$router.push({ path: '/' });
                         }, 1000);
                     }
-                    else if (1 === +res.data.state) {
+                    else if (1 === +res.body.errorCode) {
                         sessionStorage.setItem('token', null);
                         this.$message.error('用户名不存在')
                     }
-                    else if (2 === +res.data.state) {
+                    else if (2 === +res.body.errorCode) {
                         sessionStorage.setItem('token', null);
                         this.$message.error('用户名和密码不匹配')
                     }

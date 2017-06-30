@@ -21,6 +21,6 @@ module.exports = function (db, Sequelize) {
   }, {
     timestamps: false,
     freezeTableName: false
-  });
-  return result;
-};
+  })
+  return result
+}

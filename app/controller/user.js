@@ -1,5 +1,7 @@
 module.exports = app => {
   return class User extends app.Controller {
+
+    // 检查用户名是否存在
     async checkName (ctx) {
       let userName = ctx.request.body.name
       if (await ctx.orm().users.findOne({ where: { name: userName } })) {
@@ -8,6 +10,8 @@ module.exports = app => {
         ctx.toApiMessage(1)
       }
     }
+
+    // 用户登录
     async login (ctx) {
       const jwt = require('koa-jwt')
       let userInfo = ctx.request.body
@@ -57,11 +61,13 @@ module.exports = app => {
       }
     }
 
+    // 获取用户信息
     async get (ctx) {
       let name = ctx.query.name
-      ctx.body = await ctx.orm().users.findOne({where: name})
+      ctx.body = await ctx.orm().users.findOne({where: {name}})
     }
 
+    // 获取用户头像
     async avatar (ctx) {
       let userName = ctx.query.userName
       let result = await ctx.orm().users.findOne({ where: { name: userName } })

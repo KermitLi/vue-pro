@@ -53,8 +53,6 @@ marked.setOptions({
   sanitize: false,
   smartLists: true
 });
-import "gitment/style/default.css";
-
 export default {
   name: "article",
   data() {

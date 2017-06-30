@@ -112,5 +112,5 @@ img {
   height: 1.8rem;
   border-radius: 50%;
 }
-
 </style>
+
