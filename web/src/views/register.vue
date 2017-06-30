@@ -80,13 +80,13 @@ export default {
                 }
                 this.$http.post('/api/register', userInfo).then((res) => {
                     this.loading = false;
-                    if (res.data) {
+                    if (0 === +res.data.errorCode) {
                         this.$message.success("注册成功");
                         setTimeout(() => {
                             this.$router.push({ path: '/login' });
                         }, 1000);
                     }
-                    else {
+                    else if (1 === +res.data.errorCode) {
                         this.$message.error("注册失败");
                     }
                 }, (err) => { this.loading = false; this.$message.error('请求错误'); });
@@ -94,7 +94,7 @@ export default {
         },
         check() {
             this.$http.post('/api/checkName', { name: this.userName }).then((res) => {
-                if (!res.data) {
+                if (1 === +res.data.errorCode) {
                     this.$message.error('用户名已存在');
                     this.userNameUnique = false;
                 }

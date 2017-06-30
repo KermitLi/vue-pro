@@ -71,17 +71,17 @@ export default {
     updatePwd() {
       if (this.validate() && this.userNameUnique) {
         this.loading = true;
-        let userEmail = md5(this.userEmailtoLowerCase());
+        let userEmail =this.userEmail.toLowerCase();
         let userNewPwd = md5(this.userPwd);
         let userName = this.userName.toLowerCase();
-        this.$http.post('/api/resetPwd', { pwd: userNewPwd, email: userEmail, name: userName }).then((res) => {
-          if (res.data) {
+        this.$http.put('/api/resetPwd', { pwd: userNewPwd, email: userEmail, name: userName }).then((res) => {
+          if (0 === +res.data.errorCode) {
             this.$message.success("重置密码成功");
             setTimeout(() => {
               this.$router.push({ path: '/login' });
             }, 1000);
           }
-          else {
+          else if(1 === +res.data.errorCode) {
             this.$message.error("用户名和电子邮箱不一致");
           }
         }, (err) => { this.loading = false; this.$message.error('请求错误'); });
@@ -89,7 +89,7 @@ export default {
     },
     check() {
       this.$http.post('/api/checkName', { name: this.userName }).then((res) => {
-        if (!res.data) {
+        if (1 === +res.data.errorCode) {
           this.userNameUnique = true;
         }
         else {

@@ -1,13 +1,12 @@
 module.exports = app => {
   return class User extends app.Controller {
-
     // 检查用户名是否存在
     async checkName (ctx) {
       let userName = ctx.request.body.name
       if (await ctx.orm().users.findOne({ where: { name: userName } })) {
-        ctx.toApiMessage(0)
-      } else {
         ctx.toApiMessage(1)
+      } else {
+        ctx.toApiMessage(0)
       }
     }
 
@@ -33,6 +32,7 @@ module.exports = app => {
       }
     }
 
+    // 用户注册
     async register (ctx) {
       let userInfo = ctx.request.body
       if (await ctx.orm().users.create(userInfo)) {
@@ -42,15 +42,19 @@ module.exports = app => {
       }
     }
 
+    // 重置密码
     async resetPwd (ctx) {
       let { name, pwd: newPwd, email } = ctx.request.body
-      if (await ctx.orm().users.update({ pwd: newPwd }, { where: { name, email } })) {
+      let result = await ctx.orm().users.update({ pwd: newPwd }, { where: { name, email } })
+      console.log(result)
+      if (result[0] > 0) {
         ctx.toApiMessage(0)
       } else {
         ctx.toApiMessage(1)
       }
     }
 
+    // 更新用户信息
     async update (ctx) {
       let userInfo = ctx.request.body
       let { name, email, avatar_url, signature } = userInfo
@@ -72,9 +76,9 @@ module.exports = app => {
       let userName = ctx.query.userName
       let result = await ctx.orm().users.findOne({ where: { name: userName } })
       if (result) {
-        ctx.body = {state: true, url: result.avatar_url}
+        ctx.toApiMessage(0, {url: result.avatar_url})
       } else {
-        ctx.body = {state: false}
+        ctx.toApiMessage(1)
       }
     }
   }

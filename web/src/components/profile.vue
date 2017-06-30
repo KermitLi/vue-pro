@@ -106,7 +106,7 @@ export default {
         let email = this.newEmail;
         let signature = this.newSignature;
 
-        this.$http.get('/api/updateUserInfo', { params: { name, avatar_url, email, signature } }).then((res) => {
+        this.$http.put('/api/updateUserInfo', { name, avatar_url, email, signature } ).then((res) => {
           this.loading = false;
           if (res.data) {
             this.$message.success('保存成功');
