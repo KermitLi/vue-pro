@@ -45,7 +45,6 @@
 </template>
 
 <script>
-const jwt = require('koa-jwt');
 const moment = require('moment');
 moment.lang('zh-cn');
 const marked = require('marked');
@@ -100,7 +99,7 @@ export default {
         getArticles(userName) {
             if (userName) {
                 this.loading = true;
-                this.$http.get('/api/getArticle', { params: { userName } }).then((res) => {
+                this.$http.get('/api/article', { params: { userName } }).then((res) => {
                     this.articles = res.data;
                     this.articles.sort((a, b) => {
                         if (moment(a.time, 'YYYY-MM-DD HH:mm:ss').isAfter(b.time)) {
@@ -122,7 +121,7 @@ export default {
             }
             else {
                 this.loading = true;
-                this.$http.get('/api/getArticle').then((res) => {
+                this.$http.get('/api/article').then((res) => {
                     this.articles = res.data;
                     this.articles.sort((a, b) => {
                         if (moment(a.time, 'YYYY-MM-DD HH:mm:ss').isAfter(b.time)) {
@@ -145,8 +144,8 @@ export default {
         },
         getAvatar(userName, id) {
             this.$http.get('/api/avatar', { params: { userName } }).then((res) => {
-                if (res.data.state) {
-                    this.$set(this.articles[id], 'logoUrl', res.data.url);
+                if (0 === +res.data.errorCode) {
+                    this.$set(this.articles[id], 'logoUrl', res.data.data.url);
                 }
             });
         }
@@ -165,7 +164,6 @@ export default {
                 this.getArticles();
             }
             else if (to.path == '/articles/' + to.params.userName && from.path == '/') {
-                console.log(to.params.userName);
                 this.getArticles(to.params.userName);
             }
             else if (to.path == '/articles/' + to.params.userName && from.path == '/articles/' + from.params.userName) {

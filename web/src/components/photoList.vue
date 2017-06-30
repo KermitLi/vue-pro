@@ -188,7 +188,7 @@ export default {
       let userName = this.userName;
       let album = this.albumId;
       if (album) {
-        this.$http.get('/api/photos', { params: { userName, album } }).then((res) => {
+        this.$http.get('/api/photo', { params: { userName, album } }).then((res) => {
           this.loading = false;
           this.photos = res.data;
           this.photos.forEach((item, index) => {
@@ -203,7 +203,7 @@ export default {
     getAlbumInfo() {
       let userName = this.userName;
       let id = this.albumId;
-      this.$http.get('/api/getAlbums', { params: { userName, id } }).then((res) => {
+      this.$http.get('/api/album', { params: { userName, id } }).then((res) => {
         this.album = res.data[0];
       }, () => {
         this.$message.error('获取相册信息失败');

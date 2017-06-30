@@ -33,7 +33,6 @@
   </div>
 </template>
 <script>
-const jwt = require('koa-jwt');
 const moment = require('moment');
 moment.lang('zh-cn');
 const $ = require('jquery');
@@ -78,7 +77,7 @@ export default {
     },
     getArticle(id) {
       this.loading = true;
-      this.$http.get('/api/getArticleContent', { params: { id } }).then((res) => {
+      this.$http.get('/api/articleContent', { params: { id } }).then((res) => {
         this.loading = false;
         if (res.data) {
           this.article.title = res.data.title;

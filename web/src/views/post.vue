@@ -31,6 +31,9 @@
 <script>
 const jwt = require('koa-jwt');
 const moment = require('moment');
+import vueSimplemde from 'vue-simplemde'
+import Vue from 'vue'
+Vue.use(vueSimplemde);
 
 export default {
     name: 'post',
@@ -85,9 +88,9 @@ export default {
                 }
                 this.loading = true;
                 let article = { title, contents, userName, time };
-                this.$http.post('/api/postArticle', article).then((res) => {
-                    this.laoding = false;
-                    if (res.data) {
+                this.$http.post('/api/article', article).then((res) => {
+                    this.loading = false;
+                    if (0 === +res.data.errorCode) {
                         this.$message.success('发表成功');
                         this.clear();
                     }
@@ -105,7 +108,7 @@ export default {
             var userName = jwt.verify(token, 'Kermit').name;
             if (token !== null && token !== 'null') {
                 this.loading = true;
-                this.$http.get('/api/getArticleContent', { params: { id } }).then((res) => {
+                this.$http.get('/api/articleContent', { params: { id } }).then((res) => {
                     this.loading = false;
                     if (res.data) {
                         this.title = res.data.title;
@@ -125,6 +128,7 @@ export default {
         },
         updateArticle() {
             if (this.validate()) {
+              let token = sessionStorage.getItem('token');
                 if (token !== null && token !== 'null') {
                     var userName = jwt.verify(token, 'Kermit').name;
                 }
@@ -135,11 +139,10 @@ export default {
                 let title = this.title;
                 let contents = this.content;
                 let id = this.$route.params.id;
-                let token = sessionStorage.getItem('token');
                 let article = { title, contents, userName, id };
-                this.$http.post('/api/updateArticle', article, ).then((res) => {
+                this.$http.put('/api/article', article, ).then((res) => {
                     this.loading = false;
-                    if (res.data) {
+                    if (res.data[0] > 0) {
                         this.$message.success('更改成功');
                         this.$router.go(-1);
                     }
@@ -165,7 +168,7 @@ export default {
                 let title = this.title;
                 let contents = this.content;
                 let draft = { title, contents, userName };
-                this.$http.post('/api/saveDraft', draft).then((res) => {
+                this.$http.put('/api/draft', draft).then((res) => {
                     this.loading = false;
                     if (res.data) {
                         this.$message.success('保存成功');
@@ -185,7 +188,7 @@ export default {
             var userName = jwt.verify(token, 'Kermit').name;
             if (token !== null && token !== 'null') {
                 this.loading = true;
-                this.$http.get('/api/getDraft', { params: { userName } }).then((res) => {
+                this.$http.get('/api/draft', { params: { userName } }).then((res) => {
                     this.loading = false;
                     if (res.data) {
                         this.title = res.data.title;

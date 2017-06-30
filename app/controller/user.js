@@ -46,7 +46,6 @@ module.exports = app => {
     async resetPwd (ctx) {
       let { name, pwd: newPwd, email } = ctx.request.body
       let result = await ctx.orm().users.update({ pwd: newPwd }, { where: { name, email } })
-      console.log(result)
       if (result[0] > 0) {
         ctx.toApiMessage(0)
       } else {
@@ -58,7 +57,8 @@ module.exports = app => {
     async update (ctx) {
       let userInfo = ctx.request.body
       let { name, email, avatar_url, signature } = userInfo
-      if (await ctx.orm().users.update({ email, avatar_url, signature }, { where: { name } })) {
+      let result = await ctx.orm().users.update({ email, avatar_url, signature }, { where: { name } })
+      if (result[0] > 0) {
         ctx.toApiMessage(0)
       } else {
         ctx.toApiMessage(1)

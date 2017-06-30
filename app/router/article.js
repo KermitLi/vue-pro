@@ -1,7 +1,7 @@
 module.exports = app => {
-  app.post('/api/postArticle', 'article.post')
-  app.get('/api/getArticle', 'article.get')
-  app.post('/api/updateArticle', 'article.update')
-  app.delete('/article', 'article.delete')
-  app.get('/api/getArticleContent', 'article.getById')
+  app.post('/api/article', 'article.post')// 发表文章
+  app.get('/api/article', 'article.get')// 获取个人或全部文章列表
+  app.put('/api/article', 'article.update')// 更新文章内容
+  app.delete('/api/article', 'article.delete')// 删除文章
+  app.get('/api/articleContent', 'article.getById')// 获取单个文章的内容
 }

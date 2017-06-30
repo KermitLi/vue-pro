@@ -1,8 +1,9 @@
 module.exports = app => {
   return class Photo extends app.Controller {
+    // 获取相册图片
     async get (ctx) {
       let {userName, album} = ctx.query
-      ctx.body = await ctx.orm().albums.findAll({where: {userName, album}})
+      ctx.body = await ctx.orm().photos.findAll({where: {userName, album}})
     }
 
     async upload (ctx) {
@@ -15,6 +16,7 @@ module.exports = app => {
       let parts = parse(ctx, {autoFields: true})
       let part
       /* eslint-disable no-unmodified-loop-condition */
+      console.log(parts.filename)
       while ((part = await parts)) {
         let extname = path.extname(part.filename)
         var filename = md5(moment().format('YYYYMMDDHHmmss') + part.filename) + extname
@@ -37,17 +39,17 @@ module.exports = app => {
       }
     }
 
+    // 删除图片
     async delete (ctx) {
-      let query = {}
-      for (let prop of ctx.query) {
-        query[prop] = ctx.query[prop]
+      let deleteItems = await ctx.orm().photos.findAll({where: ctx.query})
+      if (deleteItems.length === 0) {
+        ctx.toApiMessage(0)
+      } else {
+        ctx.body = await ctx.orm().photos.destroy({ where: ctx.query })
+        deleteItems.forEach((item) => {
+          require('fs').unlink(require('path').join(__dirname, '../public', item.url))
+        })
       }
-
-      let deleteItems = await ctx.orm().photos.findAll({where: query})
-      ctx.body = await ctx.orm().photos.destroy({where: query})
-      deleteItems.forEach((item) => {
-        require('fs').unlink(require('path').join(__dirname, '../public', item.url))
-      })
     }
   }
 }

@@ -162,14 +162,17 @@ export default {
         let name = this.newAlbumName;
         let desc = this.newAlbumDesc;
         let album = { userName, name, desc };
-        this.$http.post('/api/createAlbum', album).then((res) => {
+        this.$http.post('/api/album', album).then((res) => {
           this.loading = false;
-          if (res.data.state) {
+          if (0 === res.data.errorCode) {
             this.$message.success('创建成功');
-            this.albums.push(res.data.result);
+            let item = res.data.data.result;
+            item['action'] = false;
+            item['cover'] = '/photos/logo.jpg';
+            this.albums.push(item);
             this.closeDialog(ref);
           }
-          else if (0 === +res.data.error_code) {
+          else if (2 === +res.data.errorCode) {
             this.$message.error('相册已存在');
           }
           else {
@@ -184,7 +187,7 @@ export default {
     getAlbums() {
       this.loading = true;
       let userName = this.userName;
-      this.$http.get('/api/getAlbums', { params: { userName } }).then((res) => {
+      this.$http.get('/api/album', { params: { userName } }).then((res) => {
         this.loading = false;
         this.albums = res.data;
         this.albums.forEach((item, index) => {
@@ -217,15 +220,15 @@ export default {
         let oldName = this.oldAlbumName;
         let oldDesc = this.oldAlbumDesc
         let album = { userName, name, desc, oldName, oldDesc };
-        this.$http.post('/api/updateAlbum', album).then((res) => {
+        this.$http.put('/api/album', album).then((res) => {
           this.loading = false;
-          if (res.data.state) {
+          if (0 === res.data.errorCode) {
             this.$message.success('更改成功');
             this.albums[this.currentAlbum].name = album.name;
             this.albums[this.currentAlbum].desc = album.desc;
             this.closeDialog(ref);
           }
-          else if (0 === +res.data.error_code) {
+          else if (2 === res.data.errorCode) {
             this.$message.error('相册已存在');
           }
           else {
@@ -240,7 +243,7 @@ export default {
     getAlbumcover(index) {
       let id = this.albums[index].id;
       let userName = this.userName;
-      this.$http.get('/api/photos', { params: { album: id, userName } }).then((res) => {
+      this.$http.get('/api/photo', { params: { album: id, userName } }).then((res) => {
         if (res.data.length > 0) {
           this.$set(this.albums[index], 'cover', res.data[0].url);
         }
@@ -252,7 +255,6 @@ export default {
 <style lang="less" scoped>
 .albums {
   height: 92%;
-  border: 1px solid;
   overflow: auto;
 
   .md-card {
