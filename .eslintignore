@@ -2,4 +2,6 @@ build/*.js
 config/*.js
 webOld
 sever
-web
+web/build
+asset
+node_modules

@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from '../store'
 import $http from 'vue-resource'
 import utear from 'vue-utear'
 import "vue-utear/dist/vue-utear.css"
@@ -18,7 +19,7 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  router, store,
   template: '<App/>',
   components: { App }
 })

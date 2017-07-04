@@ -25,7 +25,8 @@ module.exports = app => {
         if (result.pwd === userInfo.pwd) {
           let secret = 'Kermit'
           let token = jwt.sign(userInfo, secret)
-          ctx.toApiMessage(0, { token })
+          result.token = token
+          ctx.toApiMessage(0, result)
         } else {
           ctx.toApiMessage(2)
         }
