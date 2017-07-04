@@ -24,15 +24,15 @@
 import {mapGetters} from 'vuex'
 export default {
   name: 'login',
-  data: function () {
+  data () {
     return {
+      userName: '',
+      userPwd: '',
       loading: false
     }
   },
   computed: {
     ...mapGetters('user', {
-      userName: 'name',
-      userPwd: 'pwd',
       logoUrl: 'avatar_url',
       token: 'token'
     })
@@ -40,15 +40,21 @@ export default {
   methods: {
     login: function () {
       this.loading = true
-      this.$store.dispatch('login').then(msg => {
+      let name = this.userName
+      let pwd = this.userPwd
+      this.$store.dispatch('user/login', {name, pwd}).then(message => {
         this.loading = false
-        this.$message.success(msg)
+        this.$message.success(message)
         sessionStorage.setItem('token', this.token)
+        this.$router.push({path: '/'})
       }, err => {
         this.loading = false
-        this.$message.error(err)
-        sessionStorage('token', null)
+        this.$message.error(err.message)
+        sessionStorage.setItem('token', null)
       })
+    },
+    getAvatar () {
+      this.$store.dispatch('user/avatar', this.userName)
     }
   }
 }

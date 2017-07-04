@@ -20,15 +20,15 @@ module.exports = app => {
         }
       })
       if (result === null) {
-        ctx.toApiMessage(1)
+        ctx.toApiMessage(1, '用户名不存在')
       } else {
         if (result.pwd === userInfo.pwd) {
           let secret = 'Kermit'
           let token = jwt.sign(userInfo, secret)
-          result.token = token
-          ctx.toApiMessage(0, result)
+          let {name, pwd, avatar_url, signature, email} = result
+          ctx.toApiMessage(0, {name, pwd, avatar_url, signature, email, token})
         } else {
-          ctx.toApiMessage(2)
+          ctx.toApiMessage(2, '用户名和密码不匹配')
         }
       }
     }

@@ -22,7 +22,7 @@ export default {
   created(){
     let token = sessionStorage.getItem('token');
     if(token!==null&&token!=='null'){
-      this.userName = jwt.verify(token, 'Kermit').name;
+      this.userName = this.$store.getters['user/name']
     }
     else{
       this.$router.push({path:'/login'});
