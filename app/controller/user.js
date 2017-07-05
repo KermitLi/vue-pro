@@ -2,8 +2,9 @@ module.exports = app => {
   return class User extends app.Controller {
     // 检查用户名是否存在
     async checkName (ctx) {
-      let userName = ctx.query.name
-      if ((await ctx.orm().users.findOne({ where: { name: userName } })).lengh) {
+      let userName = ctx.request.body.name
+      console.log(userName)
+      if (await ctx.orm().users.findOne({ where: { name: userName } })) {
         ctx.toApiMessage(1, '用户名已存在')
       } else {
         ctx.toApiMessage(0)
@@ -37,20 +38,20 @@ module.exports = app => {
     async register (ctx) {
       let userInfo = ctx.request.body
       if (await ctx.orm().users.create(userInfo)) {
-        ctx.toApiMessage(0)
+        ctx.toApiMessage(0, '注册成功')
       } else {
-        ctx.toApiMessage(1)
+        ctx.toApiMessage(1, '注册失败')
       }
     }
 
     // 重置密码
     async resetPwd (ctx) {
-      let { name, pwd: newPwd, email } = ctx.request.body
-      let result = await ctx.orm().users.update({ pwd: newPwd }, { where: { name, email } })
+      let { name, pwd, email } = ctx.request.body
+      let result = await ctx.orm().users.update({ pwd }, { where: { name, email } })
       if (result[0] > 0) {
-        ctx.toApiMessage(0)
+        ctx.toApiMessage(0, '重置密码成功')
       } else {
-        ctx.toApiMessage(1)
+        ctx.toApiMessage(1, '重置密码失败')
       }
     }
 

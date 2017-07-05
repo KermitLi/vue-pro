@@ -57,18 +57,27 @@ export default {
         })
       })
     },
-    register (user) {
+    register (context, userInfo) {
       return new Promise((resolve, reject) => {
-        user.register(user).then(result => {
+        user.register(userInfo).then(result => {
           resolve(result)
         }, err => {
           reject(err)
         })
       })
     },
-    checkName (name) {
+    checkName (context, name) {
       return new Promise((resolve, reject) => {
         user.checkName(name).then(result => {
+          resolve(result)
+        }, err => {
+          reject(err)
+        })
+      })
+    },
+    resetPwd (context, userInfo) {
+      return new Promise((resolve, reject) => {
+        user.resetPwd(userInfo).then(result => {
           resolve(result)
         }, err => {
           reject(err)

@@ -24,10 +24,10 @@
   </div>
 </template>
 <script>
-import md5 from 'md5';
+/* eslint-disable prefer-promise-reject-errors */
 export default {
-  name: "forgetPwd",
-  data() {
+  name: 'forgetPwd',
+  data () {
     return {
       logoUrl: '/photos/logo.jpg',
       userName: '',
@@ -36,66 +36,40 @@ export default {
       confirmPwd: '',
       userNameUnique: false,
       loading: false
-    };
+    }
   },
   methods: {
-    validate() {
-      if (0 === this.userName.length) {
-        this.$message.error('用户名不能为空');
-        return false;
-      }
-      else if (0 === this.userEmail.length) {
-        this.$message.error('电子邮箱不能为空');
-        return false;
-      }
-      else if (!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(this.userEmail)) {
-        this.$message.error('非法的电子邮箱');
-        return false;
-      }
-      else if (0 === this.userPwd.length) {
-        this.$message.error('密码不能为空');
-        return false;
-      }
-      else if (0 === this.confirmPwd.length) {
-        this.$message.error('请确认密码');
-        return false;
-      }
-      else if (this.confirmPwd !== this.userPwd) {
-        this.$message.error('两次密码不一致');
-        return false;
-      }
-      else {
-        return true;
-      }
+    updatePwd () {
+      this.loading = true
+      this.check().then(() => {
+        this.loading = true
+        let { userName: name, userPwd: pwd, userEmail: email, confirmPwd } = this
+        this.$store.dispatch('user/resetPwd', {name: name.toLowerCase(), pwd, confirmPwd, email: email.toLowerCase()}).then(result => {
+          this.loading = false
+          this.$message.success(result.message)
+          this.$router.push({path: '/login'})
+        }, err => {
+          this.loading = false
+          this.$message.error(err.message)
+        })
+      }, () => {
+        this.loading = false
+      })
     },
-    updatePwd() {
-      if (this.validate() && this.userNameUnique) {
-        this.loading = true;
-        let userEmail =this.userEmail.toLowerCase();
-        let userNewPwd = md5(this.userPwd);
-        let userName = this.userName.toLowerCase();
-        this.$http.put('/api/resetPwd', { pwd: userNewPwd, email: userEmail, name: userName }).then((res) => {
-          if (0 === +res.data.errorCode) {
-            this.$message.success("重置密码成功");
-            setTimeout(() => {
-              this.$router.push({ path: '/login' });
-            }, 1000);
+    check () {
+      return new Promise((resolve, reject) => {
+        this.$store.dispatch('user/checkName', this.userName).then(() => {
+          this.$message.error('用户不存在')
+          reject()
+        }, err => {
+          if (err.errorCode === 1) {
+            resolve()
+          } else {
+            this.$message.error('服务器错误')
+            reject()
           }
-          else if(1 === +res.data.errorCode) {
-            this.$message.error("用户名和电子邮箱不一致");
-          }
-        }, (err) => { this.loading = false; this.$message.error('请求错误'); });
-      }
-    },
-    check() {
-      this.$http.post('/api/checkName', { name: this.userName }).then((res) => {
-        if (1 === +res.data.errorCode) {
-          this.userNameUnique = true;
-        }
-        else {
-          this.$message.error('用户名不存在');
-        }
-      }, (err) => this.$message.error('请求错误'));
+        })
+      })
     }
   }
 }

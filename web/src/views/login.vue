@@ -54,8 +54,10 @@ export default {
       })
     },
     getAvatar () {
-      this.$store.dispatch('user/avatar', this.userName).then(url => {
+      this.$store.dispatch('user/avatar', this.userName.toLowerCase()).then(url => {
         this.logoUrl = url
+      }, () => {
+        this.logoUrl = '/photos/logo.jpg'
       })
     }
   }

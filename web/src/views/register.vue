@@ -24,7 +24,6 @@
   </div>
 </template>
 <script>
-import md5 from 'md5';
 export default {
   name: 'register',
   data () {
@@ -40,35 +39,31 @@ export default {
   },
   methods: {
     register () {
-      this.check()
-      if (this.validate() && this.userNameUnique) {
+      this.check().then(() => {
         this.loading = true
         let userInfo = {
           name: this.userName.toLowerCase(),
           email: this.userEmail.toLowerCase(),
-          pwd: md5(this.userPwd),
-          logoUrl: this.logoUrl
+          pwd: this.userPwd,
+          confirmPwd: this.userConfirmPwd
         }
-        this.$http.post('/api/register', userInfo).then((res) => {
+        this.$store.dispatch('user/register', userInfo).then(result => {
+          this.$message.success(result.message)
+          this.$router.push({ path: '/login' })
+        }, err => {
           this.loading = false
-          if (0 === +res.data.errorCode) {
-            this.$message.success("注册成功")
-            setTimeout(() => {
-              this.$router.push({ path: '/login' });
-            }, 1000);
-          }
-          else if (1 === +res.data.errorCode) {
-            this.$message.error("注册失败");
-          }
-        }, (err) => { this.loading = false; this.$message.error('请求错误'); });
-      }
+          this.$message.error(err.message)
+        })
+      })
     },
     check () {
-      this.$store.dispatch('user/checkName').then(result => {
-        this.userNameUnique = true
-      }, err => {
-        this.$message.error(err.message)
-        this.userNameUnique = false
+      return new Promise((resolve, reject) => {
+        this.$store.dispatch('user/checkName', this.userName).then(() => {
+          resolve()
+        }, err => {
+          this.$message.error(err.message)
+          reject()
+        })
       })
     }
   }

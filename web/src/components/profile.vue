@@ -37,7 +37,7 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       editable: false,
       avatar_url: '',
@@ -47,27 +47,27 @@ export default {
       newEmail: '',
       newSignature: '',
       loading: false
-    };
+    }
   },
   props: ['userName'],
   computed: {
-    editBtnVisible() {
-      return !this.editable ? { visibility: 'visible' } : { visibility: 'hidden' };
+    editBtnVisible () {
+      return !this.editable ? { visibility: 'visible' } : { visibility: 'hidden' }
     },
-    saveBtnCancelVisible() {
-      return this.editable ? { visibility: 'visible' } : { visibility: 'hidden' };
+    saveBtnCancelVisible () {
+      return this.editable ? { visibility: 'visible' } : { visibility: 'hidden' }
     }
   },
   methods: {
-    back() {
+    back () {
       this.$router.go(-1);
     },
-    getUserInfo() {
-      this.loading = true;
-      let name = this.userName;
+    getUserInfo () {
+      this.loading = true
+      let name = this.userName
       this.$http.get('/api/userInfo', { params: { name } }).then((res) => {
-        this.loading = false;
-        let user = res.data;
+        this.loading = false
+        let user = res.data
         if (user) {
           this.newEmail = this.email = user.email;
           this.newAvatar_url = this.avatar_url = user.avatar_url;
@@ -78,7 +78,7 @@ export default {
         this.$message.error('服务器错误，获取用户信息失败');
       });
     },
-    validate() {
+    validate () {
       if (0 === this.newEmail.trim().length) {
         this.$message.error('电子邮箱不能为空');
         return false;
