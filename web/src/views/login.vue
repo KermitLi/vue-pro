@@ -28,12 +28,12 @@ export default {
     return {
       userName: '',
       userPwd: '',
-      loading: false
+      loading: false,
+      logoUrl: '/photos/logo.jpg'
     }
   },
   computed: {
     ...mapGetters('user', {
-      logoUrl: 'avatar_url',
       token: 'token'
     })
   },
@@ -54,7 +54,9 @@ export default {
       })
     },
     getAvatar () {
-      this.$store.dispatch('user/avatar', this.userName)
+      this.$store.dispatch('user/avatar', this.userName).then(url => {
+        this.logoUrl = url
+      })
     }
   }
 }

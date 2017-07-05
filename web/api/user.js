@@ -4,20 +4,56 @@ const $http = require('axios')
 export default {
   $http,
   validate (user) {
-    let result = {error_code: 1, message: ''}
+    let result = {errorCode: 1, message: ''}
     if (user.name.length === 0) {
       result.message = '用户名不能为空'
     } else if (user.pwd.length === 0) {
       result.message = '密码不能为空'
     } else {
-      result.error_code = 0
+      result.errorCode = 0
     }
     return result
+  },
+  validateRegister (user) {
+    let result = {errorCode: 1, message: ''}
+    if (user.userName.trim().length === 0) {
+      result.message = '用户名不能为空'
+    } else if (user.userEmail.trim().length === 0) {
+      result.message = '电子邮箱不能为空'
+    } else if (!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(user.userEmail.trim())) {
+      result.message = '非法的电子邮箱'
+    } else if (user.userPwd.trim().length === 0) {
+      result.message = '密码不能为空'
+    } else if (user.userConfirmPwd.trim().length === 0) {
+      result.message = '请确认密码'
+    } else if (user.userConfirmPwd !== user.userPwd) {
+      result.message = '两次密码不一致'
+    } else {
+      result.errorCode = 0
+    }
+  },
+  checkName (name) {
+    return new Promise((resolve, reject) => {
+      let result = {errorCode: 0}
+      this.$http.get('/api/checkName', {params: {name}}).then(res => {
+        if (res.data.errorCode === 1) {
+          result.errorCode = 1
+          result.message = '用户名已存在'
+          reject(result)
+        } else {
+          resolve(res.data)
+        }
+      }, () => {
+        result.errorCode = 500
+        result.message = '服务器错误'
+        reject(result)
+      })
+    })
   },
   login (user) {
     return new Promise((resolve, reject) => {
       let result = this.validate(user)
-      if (result.error_code === 0) {
+      if (result.errorCode === 0) {
         let userInfo = {
           name: user.name.toLowerCase(),
           pwd: md5(user.pwd)
@@ -32,7 +68,7 @@ export default {
           resolve(result)
         }, function () {
           result.message = '服务器错误'
-          result.error_code = 500
+          result.errorCode = 500
           reject(result)
         })
       } else {

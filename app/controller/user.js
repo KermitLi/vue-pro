@@ -2,9 +2,9 @@ module.exports = app => {
   return class User extends app.Controller {
     // 检查用户名是否存在
     async checkName (ctx) {
-      let userName = ctx.request.body.name
-      if (await ctx.orm().users.findOne({ where: { name: userName } })) {
-        ctx.toApiMessage(1)
+      let userName = ctx.query.name
+      if ((await ctx.orm().users.findOne({ where: { name: userName } })).lengh) {
+        ctx.toApiMessage(1, '用户名已存在')
       } else {
         ctx.toApiMessage(0)
       }

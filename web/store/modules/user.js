@@ -35,9 +35,6 @@ export default {
       state.pwd = ''
       state.avatar_url = '/photos/logo.jpg'
       state.signature = '您还没有个性签名'
-    },
-    [types.USER_AVATAR] (state, url) {
-      state.avatar_url = url
     }
   },
   actions: {
@@ -54,9 +51,26 @@ export default {
     avatar ({commit}, name) {
       return new Promise((resolve, reject) => {
         user.avatar(name).then(url => {
-          commit(types.USER_AVATAR, url)
           resolve(url)
         }, (err) => {
+          reject(err)
+        })
+      })
+    },
+    register (user) {
+      return new Promise((resolve, reject) => {
+        user.register(user).then(result => {
+          resolve(result)
+        }, err => {
+          reject(err)
+        })
+      })
+    },
+    checkName (name) {
+      return new Promise((resolve, reject) => {
+        user.checkName(name).then(result => {
+          resolve(result)
+        }, err => {
           reject(err)
         })
       })
