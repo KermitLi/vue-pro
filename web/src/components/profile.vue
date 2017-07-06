@@ -36,13 +36,11 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       editable: false,
-      avatar_url: '',
-      email: '',
-      signature: '',
       newAvatar_url: '/photos/logo.jpg',
       newEmail: '',
       newSignature: '',
@@ -56,74 +54,59 @@ export default {
     },
     saveBtnCancelVisible () {
       return this.editable ? { visibility: 'visible' } : { visibility: 'hidden' }
-    }
+    },
+    ...mapGetters('user', ['avatar_url', 'email', 'signature'])
   },
   methods: {
     back () {
-      this.$router.go(-1);
-    },
-    getUserInfo () {
-      this.loading = true
-      let name = this.userName
-      this.$http.get('/api/userInfo', { params: { name } }).then((res) => {
-        this.loading = false
-        let user = res.data
-        if (user) {
-          this.newEmail = this.email = user.email;
-          this.newAvatar_url = this.avatar_url = user.avatar_url;
-          this.newSignature = this.signature = user.signature;
-        }
-      }, () => {
-        this.loading = false;
-        this.$message.error('服务器错误，获取用户信息失败');
-      });
+      this.$router.go(-1)
     },
     validate () {
-      if (0 === this.newEmail.trim().length) {
-        this.$message.error('电子邮箱不能为空');
-        return false;
-      }
-      else if (!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(this.newEmail.trim())) {
-        this.$message.error('非法的电子邮箱');
-        return false;
-      }
-      else if (0 === this.newSignature.trim()) {
-        this.newSignature = this.signature;
-        return true;
-      }
-      else {
-        return true;
+      if (this.newEmail.trim().length === 0) {
+        this.$message.error('电子邮箱不能为空')
+        return false
+      } else if (!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(this.newEmail.trim())) {
+        this.$message.error('非法的电子邮箱')
+        return false
+      } else if (this.newSignature.trim().length === 0) {
+        this.newSignature = this.signature
+        return false
+      } else {
+        return true
       }
     },
-    updateUserinfo() {
+    updateUserinfo () {
       if (this.avatar_url === this.newAvatar_url && this.email === this.newEmail.trim() && this.signature === this.newSignature) {
         this.$message.success('保存成功')
       }
       if (this.validate()) {
-        this.loading = true;
-        let name = this.userName;
-        let avatar_url = this.newAvatar_url;
-        let email = this.newEmail;
-        let signature = this.newSignature;
-
-        this.$http.put('/api/userInfo', { name, avatar_url, email, signature } ).then((res) => {
-          this.loading = false;
-          if (res.data) {
-            this.$message.success('保存成功');
-            this.editable = false;
-          }
-        }, () => {
-          this.loading = false;
-          this.$message.error('服务器错误');
-        });
+        this.loading = true
+        let name = this.userName
+        /* eslint-disable camelcase */
+        let avatar_url = this.newAvatar_url
+        let email = this.newEmail
+        let signature = this.newSignature
+        this.$store.dispatch('user/update', { name, avatar_url, email, signature }).then(result => {
+          console.log(result)
+          this.loading = false
+          this.editable = false
+          this.$message.success(result.message)
+        }, err => {
+          console.log(err)
+          this.loading = false
+          this.editable = false
+          this.$message.error(err.message)
+        })
       }
     },
-    onUploadSuccess(res) {
-      this.newAvatar_url = res.url;
+    onUploadSuccess (res) {
+      this.newAvatar_url = res.url
     }
   },
-  created() {
-    this.getUserInfo();
+  created () {
+    this.newAvatar_url = this.avatar_url
+    this.newEmail = this.email
+    this.newSignature = this.signature
   }
 }
 </script>

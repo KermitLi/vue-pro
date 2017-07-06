@@ -83,6 +83,15 @@ export default {
           reject(err)
         })
       })
+    },
+    update (context, userInfo) {
+      return new Promise((resolve, reject) => {
+        user.update(userInfo).then(result => {
+          resolve(result)
+        }, err => {
+          reject(err)
+        })
+      })
     }
   }
 }

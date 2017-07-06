@@ -127,5 +127,18 @@ export default {
         reject(result)
       }
     })
+  },
+  update (userInfo) {
+    return new Promise((resolve, reject) => {
+      this.$http.put('/api/userInfo', userInfo).then(res => {
+        if (res.data.errorCode === 0) {
+          resolve(res.data)
+        } else {
+          reject(res.data)
+        }
+      }, () => {
+        reject({errorCode: 500, message: '服务器错误'})
+      })
+    })
   }
 }

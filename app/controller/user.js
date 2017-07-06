@@ -61,9 +61,9 @@ module.exports = app => {
       let { name, email, avatar_url, signature } = userInfo
       let result = await ctx.orm().users.update({ email, avatar_url, signature }, { where: { name } })
       if (result[0] > 0) {
-        ctx.toApiMessage(0)
+        ctx.toApiMessage(0, '更新成功')
       } else {
-        ctx.toApiMessage(1)
+        ctx.toApiMessage(1, '更新失败')
       }
     }
 
